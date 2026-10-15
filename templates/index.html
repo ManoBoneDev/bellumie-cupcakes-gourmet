@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bellumiê Cupcakes Gourmet</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Bellumiê Cupcakes Gourmet</h1>
+        <p>Os melhores cupcakes gourmet para você!</p>
+    </header>
+
+
+    <main class="container">
+
+    <h2>Nossos Cupcakes</h2>
+
+    <div class="produtos" id="lista-produtos">
+        <p>Carregando cupcakes...</p>
+    </div>
+
+        <!-- CARRINHO -->
+
+        <aside id="carrinho-container">
+
+            <h2>Meu pedido</h2>
+
+            <ul id="lista-pedidos"></ul>
+
+            <div class="linha-total">
+                <span>Total</span>
+                <strong id="total-pedido">R$ 0,00</strong>
+            </div>
+
+            <button id="ir-para-checkout">
+                Finalizar pedido
+            </button>
+
+        </aside>
+
+    </main>
+
+
+    <!-- MODAL DE CHECKOUT -->
+
+    <div id="checkout-container" class="modal">
+
+        <div class="modal-conteudo">
+
+            <button id="fechar-checkout" class="fechar">
+                ×
+            </button>
+
+            <h2>Finalizar pedido</h2>
+
+            <p>Preencha seus dados para concluir a compra.</p>
+
+            <input
+                type="text"
+                id="nome-cliente"
+                placeholder="Seu nome"
+            >
+
+            <input
+                type="text"
+                id="endereco-cliente"
+                placeholder="Endereço de entrega"
+            >
+
+            <select id="forma-pagamento">
+
+                <option value="">
+                    Selecione a forma de pagamento
+                </option>
+
+                <option value="Pix">
+                    Pix
+                </option>
+
+                <option value="Cartão">
+                    Cartão
+                </option>
+
+                <option value="Dinheiro">
+                    Dinheiro
+                </option>
+
+            </select>
+
+            <p id="mensagem-erro"></p>
+
+            <div class="botoes-checkout">
+
+                <button id="confirmar-pedido">
+                    Confirmar pedido
+                </button>
+
+                <button id="voltar-checkout" class="botao-voltar">
+                    Voltar
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MODAL DE SUCESSO -->
+
+    <div id="pedido-sucesso" class="modal">
+
+        <div class="modal-conteudo sucesso">
+
+            <div class="icone-sucesso">
+                ✓
+            </div>
+
+            <h2>Pedido realizado!</h2>
+
+            <p>
+                Seu pedido foi recebido com sucesso.
+            </p>
+
+            <p>
+                Obrigado por comprar na
+                <strong>Bellumiê Cupcakes Gourmet!</strong>
+            </p>
+
+            <button id="fechar-sucesso">
+                Continuar comprando
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+        Bellumiê Cupcakes Gourmet © 2026
+    </footer>
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
