@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do Vendedor | Bellumiê</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <script src="{{ url_for('static', filename='admin.js') }}" defer></script>
+</head>
+
+<body>
+    <header class="cabecalho">
+        <div>
+            <h1>Bellumiê</h1>
+            <p>Painel do vendedor</p>
+        </div>
+
+        <nav class="acoes-cabecalho" aria-label="Navegação principal">
+            <a href="{{ url_for('painel_produtos') }}">Produtos da loja</a>
+            <a href="/">Voltar para a loja</a>
+        </nav>
+    </header>
+
+    <main class="conteudo">
+        <section class="boas-vindas" aria-labelledby="titulo-painel">
+            <div class="icone-boas-vindas" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none">
+                    <path d="M8 21h32v20H8z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M5 21 10 8h28l5 13H5Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                    <path d="M5 21c0 5 8 5 8 0 0 5 8 5 8 0 0 5 8 5 8 0 0 5 8 5 8 0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M19 41V29h10v12M15 14v4m9-4v4m9-4v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <div class="texto-boas-vindas">
+                <span class="etiqueta-painel">ÁREA ADMINISTRATIVA</span>
+                <h2 id="titulo-painel">Gerenciamento de pedidos</h2>
+                <p>Acompanhe as vendas, organize os pedidos e mantenha tudo em dia.</p>
+            </div>
+
+            <div class="detalhe-boas-vindas" aria-hidden="true">✦</div>
+        </section>
+
+        <section class="resumo" aria-label="Resumo dos pedidos">
+            <div class="cartao-resumo">
+                <div class="icone-resumo" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <rect x="11" y="9" width="26" height="34" rx="4" stroke="currentColor" stroke-width="2.5"/>
+                        <rect x="18" y="5" width="12" height="8" rx="3" fill="#fce1e9" stroke="currentColor" stroke-width="2.5"/>
+                        <path d="m17 22 2.5 2.5L24 20m3 3h6M17 32l2.5 2.5L24 30m3 3h6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+
+                <div class="texto-resumo">
+                    <span>Total de pedidos</span>
+                    <strong id="total-pedidos">0</strong>
+                    <small>Pedidos registrados na loja</small>
+                </div>
+
+                <div class="detalhe-cartao" aria-hidden="true">01</div>
+            </div>
+
+            <div class="cartao-resumo">
+                <div class="icone-resumo" aria-hidden="true">
+                    <svg viewBox="0 0 48 48" fill="none">
+                        <path d="M8 7h21a5 5 0 0 1 5 5v5H8a5 5 0 0 1 0-10Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M13 17v7l-4 14h24l-4-14v-7M9 38h24" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M24 24h14v5a7 7 0 0 1-14 0v-5Z" fill="#fce1e9" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                        <path d="M28 24v-4h6v4m-3 5v4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M6 17h31" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <div class="texto-resumo">
+                    <span>Em andamento</span>
+                    <strong id="pedidos-andamento">0</strong>
+                    <small>Pedidos que ainda precisam de atenção</small>
+                </div>
+
+                <div class="detalhe-cartao" aria-hidden="true">02</div>
+            </div>
+        </section>
+
+        <section class="secao-pedidos" aria-labelledby="titulo-pedidos">
+            <h2 id="titulo-pedidos">Pedidos recebidos</h2>
+            <p id="mensagem" role="status" aria-live="polite">Carregando pedidos...</p>
+            <div id="lista-pedidos"></div>
+        </section>
+    </main>
+
+    <!-- Confirmação de exclusão -->
+    <div id="modal-excluir" class="modal-confirmacao">
+        <div
+            class="conteudo-confirmacao"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-exclusao"
+            aria-describedby="texto-confirmacao"
+        >
+            <h2 id="titulo-exclusao">Excluir pedido?</h2>
+
+            <p id="texto-confirmacao">
+                Tem certeza que deseja excluir este pedido?
+            </p>
+
+            <div class="botoes-confirmacao">
+                <button id="cancelar-exclusao" class="botao-cancelar" type="button">
+                    Cancelar
+                </button>
+
+                <button id="confirmar-exclusao" class="botao-excluir" type="button">
+                    Sim, excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

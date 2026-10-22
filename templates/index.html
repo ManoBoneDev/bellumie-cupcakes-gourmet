@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Bellumiê Cupcakes Gourmet</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="hero">
+    <div class="hero-conteudo">
+        <img
+            class="hero-logo"
+            src="{{ url_for('static', filename='imagens/logo-bellumie.png') }}"
+            alt="Bellumiê Cupcakes Gourmet"
+        >
+    </div>
+</header>
+
+    <main class="container">
+        <section aria-labelledby="titulo-produtos">
+            <h2 id="titulo-produtos">Nossos Cupcakes</h2>
+
+            <div class="produtos" id="lista-produtos">
+                <p>Carregando cupcakes...</p>
+            </div>
+        </section>
+
+        <!-- Carrinho de compras -->
+        <aside id="carrinho-container" aria-labelledby="titulo-carrinho">
+            <h2 id="titulo-carrinho">Meu pedido</h2>
+
+            <ul id="lista-pedidos"></ul>
+
+            <div class="linha-total">
+                <span>Total</span>
+                <strong id="total-pedido">R$ 0,00</strong>
+            </div>
+
+            <button id="ir-para-checkout" type="button">
+                Finalizar pedido
+            </button>
+        </aside>
+    </main>
+
+    <!-- Janela de finalização do pedido -->
+    <div id="checkout-container" class="modal">
+        <div
+            class="modal-conteudo"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-checkout"
+        >
+            <button
+                id="fechar-checkout"
+                class="fechar"
+                type="button"
+                aria-label="Fechar janela"
+            >
+                ×
+            </button>
+
+            <h2 id="titulo-checkout">Finalizar pedido</h2>
+
+            <p>Preencha seus dados para concluir a compra.</p>
+
+            <label for="nome-cliente">Nome</label>
+            <input
+                type="text"
+                id="nome-cliente"
+                placeholder="Seu nome"
+                maxlength="80"
+                autocomplete="name"
+                required
+            >
+
+            <label for="endereco-cliente">Endereço de entrega</label>
+            <input
+                type="text"
+                id="endereco-cliente"
+                placeholder="Endereço de entrega"
+                maxlength="300"
+                autocomplete="street-address"
+                required
+            >
+
+            <label for="forma-pagamento">Forma de pagamento</label>
+            <select id="forma-pagamento" required>
+                <option value="">Selecione a forma de pagamento</option>
+                <option value="Pix">Pix</option>
+                <option value="Cartão">Cartão</option>
+                <option value="Dinheiro">Dinheiro</option>
+            </select>
+
+            <p id="mensagem-erro" role="alert"></p>
+
+            <div class="botoes-checkout">
+                <button id="confirmar-pedido" type="button">
+                    Confirmar pedido
+                </button>
+
+                <button
+                    id="voltar-checkout"
+                    class="botao-voltar"
+                    type="button"
+                >
+                    Voltar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Janela de confirmação do pedido -->
+    <div id="pedido-sucesso" class="modal">
+        <div
+            class="modal-conteudo sucesso"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-sucesso"
+        >
+            <div class="icone-sucesso" aria-hidden="true">
+                ✓
+            </div>
+
+            <h2 id="titulo-sucesso">Pedido realizado!</h2>
+
+            <p>Seu pedido foi recebido com sucesso.</p>
+
+            <p>
+                Obrigado por comprar na
+                <strong>Bellumiê Cupcakes Gourmet!</strong>
+            </p>
+
+            <button id="fechar-sucesso" type="button">
+                Continuar comprando
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        Bellumiê Cupcakes Gourmet © 2026
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>

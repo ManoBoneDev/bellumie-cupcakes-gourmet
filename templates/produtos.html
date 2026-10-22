@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos da Loja - Bellumiê</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+    <script src="{{ url_for('static', filename='produtos.js') }}" defer></script>
+</head>
+<body>
+    <header class="cabecalho">
+        <div>
+            <h1>Produtos da Loja</h1>
+            <p>Gerencie os cupcakes da Bellumiê.</p>
+        </div>
+
+        <a class="botao-cabecalho" href="{{ url_for('painel_vendedor') }}">
+    Voltar aos pedidos
+</a>
+    </header>
+
+    <main class="conteudo">
+        <section class="secao-pedidos secao-produtos">
+            <div class="cabecalho-produtos">
+                <div>
+                    <h2>Gerenciar cupcakes</h2>
+                    <p>Cadastre e gerencie os produtos da loja.</p>
+                </div>
+
+                <button type="button" id="botao-abrir-cadastro">
+                    + Cadastrar cupcake
+                </button>
+            </div>
+
+            <p id="mensagem-produtos" role="status" aria-live="polite">
+                Carregando produtos...
+            </p>
+
+            <div id="lista-produtos"></div>
+        </section>
+    </main>
+
+    <!-- Modal de cadastro de cupcake -->
+    <div id="modal-produto" class="modal-produto" aria-hidden="true">
+        <div
+            class="modal-produto-conteudo"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-formulario"
+        >
+            <button
+                type="button"
+                id="botao-fechar-modal"
+                class="botao-fechar-modal"
+                aria-label="Fechar janela"
+            >
+                &times;
+            </button>
+
+            <h2 id="titulo-formulario">Cadastrar novo cupcake</h2>
+            <p>Preencha os dados do novo sabor.</p>
+
+            <form id="form-produto">
+                <input type="hidden" id="produto-id">
+
+                <label for="nome-produto">Nome do cupcake</label>
+                <input
+                    type="text"
+                    id="nome-produto"
+                    required
+                    maxlength="80"
+                >
+
+                <label for="descricao-produto">Descrição</label>
+                <textarea
+                    id="descricao-produto"
+                    required
+                    maxlength="250"
+                ></textarea>
+
+                <label for="preco-produto">Preço (R$)</label>
+                <input
+                    type="number"
+                    id="preco-produto"
+                    required
+                    min="0.01"
+                    step="0.01"
+                >
+
+                <label for="imagem-produto">Imagem do cupcake</label>
+                <input
+                    type="file"
+                    id="imagem-produto"
+                    accept="image/png, image/jpeg, image/webp"
+                    required
+                >
+
+                <p id="nome-arquivo-imagem">
+                    Nenhuma imagem selecionada.
+                </p>
+
+                <div class="acoes-formulario">
+                    <button type="submit" id="botao-salvar-produto">
+                        Finalizar cadastro
+                    </button>
+
+                    <button
+                        type="button"
+                        id="botao-cancelar-edicao"
+                        hidden
+                    >
+                        Cancelar edição
+                    </button>
+
+                    <button
+                        type="button"
+                        id="botao-cancelar-cadastro"
+                    >
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+
+            <!-- Mensagem de cadastro realizado -->
+            <div
+                id="sucesso-produto"
+                class="sucesso-produto"
+                role="status"
+                aria-live="polite"
+                hidden
+            >
+                <div class="icone-sucesso">&#10003;</div>
+
+                <h3>Cadastro realizado!</h3>
+
+                <p id="texto-sucesso-produto">
+                    O cupcake foi cadastrado com sucesso.
+                </p>
+
+                <button type="button" id="botao-sucesso-ok">
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar preço -->
+    <div id="modal-preco" class="modal-produto" aria-hidden="true">
+        <div
+            class="modal-preco-conteudo"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-modal-preco"
+        >
+            <button
+                type="button"
+                id="fechar-modal-preco"
+                class="botao-fechar-modal"
+                aria-label="Fechar janela"
+            >
+                &times;
+            </button>
+
+            <div class="icone-editar-preco">R$</div>
+
+            <h2 id="titulo-modal-preco">Alterar preço</h2>
+
+            <p id="nome-cupcake-preco">
+                Informe o novo preço do cupcake.
+            </p>
+
+            <form id="formulario-preco">
+                <label for="novo-preco">Novo preço (R$)</label>
+
+                <input
+                    type="number"
+                    id="novo-preco"
+                    min="0.01"
+                    step="0.01"
+                    required
+                >
+
+                <p id="erro-preco" role="alert"></p>
+
+                <div class="acoes-preco">
+                    <button type="button" id="cancelar-preco">
+                        Cancelar
+                    </button>
+
+                    <button type="submit" id="salvar-preco">
+                        Salvar alteração
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal de confirmação de exclusão -->
+<div id="modal-excluir" class="modal-produto" aria-hidden="true">
+    <div
+        class="modal-preco-conteudo"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-excluir"
+    >
+        <div class="icone-editar-preco">!</div>
+
+        <h2 id="titulo-excluir">Excluir cupcake?</h2>
+
+        <p id="nome-cupcake-excluir">
+            Tem certeza de que deseja excluir este cupcake?
+        </p>
+
+        <div class="acoes-preco">
+            <button type="button" id="cancelar-exclusao">
+                Cancelar
+            </button>
+
+            <button type="button" id="confirmar-exclusao">
+                Sim, excluir
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
