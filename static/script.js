@@ -301,3 +301,17 @@ fecharSucesso.addEventListener("click", function() {
 
 carrinhoContainer.style.display = "none";
 carregarProdutos();
+
+/* Preparar a animação inicial */
+window.addEventListener("load", function() {
+    setTimeout(function() {
+        document.body.classList.remove("animando");
+    }, 1200);
+});
+
+/* Reduzir o cabeçalho ao rolar a página */
+window.addEventListener("scroll", function() {
+    if (window.scrollY > 30) {
+        document.body.classList.add("loja-revelada");
+    }
+});
