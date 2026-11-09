@@ -1,29 +1,34 @@
-
 const listaProdutos = document.querySelector("#lista-produtos");
 const mensagemProdutos = document.querySelector("#mensagem-produtos");
 
 const formularioProduto = document.querySelector("#form-produto");
+const campoId = document.querySelector("#produto-id");
 const campoNome = document.querySelector("#nome-produto");
 const campoDescricao = document.querySelector("#descricao-produto");
+const campoDescricaoDetalhada = document.querySelector("#descricao-detalhada-produto");
+const campoIngredientes = document.querySelector("#ingredientes-produto");
+const campoAlergenicos = document.querySelector("#alergenicos-produto");
 const campoPreco = document.querySelector("#preco-produto");
 const campoImagem = document.querySelector("#imagem-produto");
+const campoImagemContainer = document.querySelector("#campo-imagem-produto");
 const nomeArquivoImagem = document.querySelector("#nome-arquivo-imagem");
+
 const botaoSalvar = document.querySelector("#botao-salvar-produto");
+const botaoCancelarEdicao = document.querySelector("#botao-cancelar-edicao");
+const botaoCancelarCadastro = document.querySelector("#botao-cancelar-cadastro");
+
+const tituloFormulario = document.querySelector("#titulo-formulario");
+const subtituloFormulario = document.querySelector("#subtitulo-formulario");
+const erroFormulario = document.querySelector("#erro-formulario-produto");
 
 const modalProduto = document.querySelector("#modal-produto");
 const botaoAbrirCadastro = document.querySelector("#botao-abrir-cadastro");
 const botaoFecharModal = document.querySelector("#botao-fechar-modal");
-const botaoCancelarCadastro = document.querySelector("#botao-cancelar-cadastro");
 
 const sucessoProduto = document.querySelector("#sucesso-produto");
+const tituloSucessoProduto = document.querySelector("#titulo-sucesso-produto");
 const textoSucessoProduto = document.querySelector("#texto-sucesso-produto");
 const botaoSucessoOk = document.querySelector("#botao-sucesso-ok");
-
-const modalPreco = document.querySelector("#modal-preco");
-const formularioPreco = document.querySelector("#formulario-preco");
-const campoNovoPreco = document.querySelector("#novo-preco");
-const erroPreco = document.querySelector("#erro-preco");
-const botaoSalvarPreco = document.querySelector("#salvar-preco");
 
 const modalExcluir = document.querySelector("#modal-excluir");
 const nomeCupcakeExcluir = document.querySelector("#nome-cupcake-excluir");
@@ -31,6 +36,8 @@ const botaoCancelarExclusao = document.querySelector("#cancelar-exclusao");
 const botaoConfirmarExclusao = document.querySelector("#confirmar-exclusao");
 
 const extensoesPermitidas = [".jpg", ".jpeg", ".png", ".webp"];
+
+let modoFormulario = "cadastro";
 
 function formatarMoeda(valor) {
     return Number(valor).toLocaleString("pt-BR", {
@@ -63,7 +70,6 @@ function fecharModal(modal) {
 
     const algumAberto = [
         modalProduto,
-        modalPreco,
         modalExcluir
     ].some(item => item.classList.contains("aberto"));
 
@@ -72,20 +78,85 @@ function fecharModal(modal) {
     }
 }
 
-function abrirCadastro() {
+function limparFormularioProduto() {
     formularioProduto.reset();
+    campoId.value = "";
     nomeArquivoImagem.textContent = "Nenhuma imagem selecionada.";
+    erroFormulario.textContent = "";
+    modoFormulario = "cadastro";
+
+    tituloFormulario.textContent = "Cadastrar novo cupcake";
+    subtituloFormulario.textContent = "Preencha os dados do novo sabor.";
+
+    botaoSalvar.textContent = "Finalizar cadastro";
+    botaoCancelarCadastro.hidden = false;
+    botaoCancelarEdicao.hidden = true;
+
+    campoImagemContainer.hidden = false;
+    campoImagem.required = true;
+}
+
+function abrirCadastro() {
+    limparFormularioProduto();
+
     formularioProduto.hidden = false;
     sucessoProduto.hidden = true;
+
+    mostrarMensagem("");
+    abrirModal(modalProduto);
+    campoNome.focus();
+}
+
+function abrirEdicao(produto) {
+    limparFormularioProduto();
+
+    modoFormulario = "edicao";
+
+    campoId.value = produto.id;
+    campoNome.value = produto.nome || "";
+    campoDescricao.value = produto.descricao || "";
+    campoDescricaoDetalhada.value = produto.descricao_detalhada || "";
+    campoIngredientes.value = produto.ingredientes || "";
+    campoAlergenicos.value = produto.alergenicos || "";
+    campoPreco.value = Number(produto.preco).toFixed(2);
+
+    tituloFormulario.textContent = "Editar informações do cupcake";
+    subtituloFormulario.textContent =
+        `Atualize as informações de ${produto.nome}.`;
+
+    botaoSalvar.textContent = "Salvar alterações";
+    botaoCancelarCadastro.hidden = true;
+    botaoCancelarEdicao.hidden = false;
+
+    // A foto continua sendo alterada pelo botão "Trocar foto".
+    campoImagemContainer.hidden = true;
+    campoImagem.required = false;
+
+    formularioProduto.hidden = false;
+    sucessoProduto.hidden = true;
+
     mostrarMensagem("");
     abrirModal(modalProduto);
     campoNome.focus();
 }
 
 botaoAbrirCadastro.addEventListener("click", abrirCadastro);
-botaoFecharModal.addEventListener("click", () => fecharModal(modalProduto));
-botaoCancelarCadastro.addEventListener("click", () => fecharModal(modalProduto));
-botaoSucessoOk.addEventListener("click", () => fecharModal(modalProduto));
+
+botaoFecharModal.addEventListener("click", () => {
+    fecharModal(modalProduto);
+});
+
+botaoCancelarCadastro.addEventListener("click", () => {
+    fecharModal(modalProduto);
+});
+
+botaoCancelarEdicao.addEventListener("click", () => {
+    fecharModal(modalProduto);
+});
+
+botaoSucessoOk.addEventListener("click", () => {
+    fecharModal(modalProduto);
+});
 
 modalProduto.addEventListener("click", evento => {
     if (evento.target === modalProduto) {
@@ -118,6 +189,7 @@ function validarImagem(arquivo) {
 
 function criarImagem(produto) {
     const imagem = document.createElement("img");
+
     imagem.className = "foto-produto-admin";
     imagem.src = `/static/imagens/${encodeURIComponent(produto.imagem)}`;
     imagem.alt = `Foto do cupcake ${produto.nome}`;
@@ -177,15 +249,18 @@ async function carregarProdutos() {
             const acoes = document.createElement("div");
             acoes.className = "acoes-produto";
 
+            // Seletor de imagem.
             const seletorArquivo = document.createElement("input");
             seletorArquivo.type = "file";
             seletorArquivo.accept = ".jpg,.jpeg,.png,.webp";
             seletorArquivo.hidden = true;
+
             seletorArquivo.setAttribute(
                 "aria-label",
                 `Escolher foto para ${produto.nome}`
             );
 
+            // Botão para trocar foto.
             const botaoTrocarFoto = document.createElement("button");
             botaoTrocarFoto.type = "button";
             botaoTrocarFoto.textContent = "Trocar foto";
@@ -252,23 +327,17 @@ async function carregarProdutos() {
                 }
             });
 
-            const botaoEditar = document.createElement("button");
-            botaoEditar.type = "button";
-            botaoEditar.textContent = "Editar preço";
-            botaoEditar.className = "botao-editar-preco";
+            // Botão para editar todas as informações.
+            const botaoEditarInformacoes = document.createElement("button");
+            botaoEditarInformacoes.type = "button";
+            botaoEditarInformacoes.textContent = "Editar informações";
+            botaoEditarInformacoes.className = "botao-editar-informacoes";
 
-            botaoEditar.addEventListener("click", () => {
-                document.querySelector("#nome-cupcake-preco").textContent =
-                    `Digite o novo preço de ${produto.nome}.`;
-
-                campoNovoPreco.value = Number(produto.preco).toFixed(2);
-                erroPreco.textContent = "";
-                modalPreco.dataset.produtoId = produto.id;
-
-                abrirModal(modalPreco);
-                campoNovoPreco.focus();
+            botaoEditarInformacoes.addEventListener("click", () => {
+                abrirEdicao(produto);
             });
 
+            // Botão para excluir.
             const botaoExcluir = document.createElement("button");
             botaoExcluir.type = "button";
             botaoExcluir.textContent = "Excluir";
@@ -284,7 +353,7 @@ async function carregarProdutos() {
 
             acoes.append(
                 botaoTrocarFoto,
-                botaoEditar,
+                botaoEditarInformacoes,
                 botaoExcluir
             );
 
@@ -304,6 +373,7 @@ async function carregarProdutos() {
         mostrarMensagem(
             "Erro ao carregar os cupcakes. Confira se o servidor está funcionando."
         );
+
         console.error(erro);
     }
 }
@@ -313,132 +383,118 @@ formularioProduto.addEventListener("submit", async evento => {
 
     const nome = campoNome.value.trim();
     const descricao = campoDescricao.value.trim();
+    const descricaoDetalhada = campoDescricaoDetalhada.value.trim();
+    const ingredientes = campoIngredientes.value.trim();
+    const alergenicos = campoAlergenicos.value.trim();
     const preco = Number(campoPreco.value);
     const arquivo = campoImagem.files[0];
 
+    erroFormulario.textContent = "";
+
     if (!nome || !descricao) {
-        mostrarMensagem("Preencha o nome e a descrição do cupcake.");
+        erroFormulario.textContent =
+            "Preencha o nome e a descrição curta do cupcake.";
         return;
     }
 
     if (!Number.isFinite(preco) || preco <= 0) {
-        mostrarMensagem("Informe um preço maior que zero.");
+        erroFormulario.textContent = "Informe um preço maior que zero.";
         return;
     }
 
-    const erroImagem = validarImagem(arquivo);
+    if (modoFormulario === "cadastro") {
+        const erroImagem = validarImagem(arquivo);
 
-    if (erroImagem) {
-        mostrarMensagem(erroImagem);
-        return;
+        if (erroImagem) {
+            erroFormulario.textContent = erroImagem;
+            return;
+        }
     }
 
     botaoSalvar.disabled = true;
-    botaoSalvar.textContent = "Cadastrando...";
+    botaoSalvar.textContent = modoFormulario === "cadastro"
+        ? "Cadastrando..."
+        : "Salvando alterações...";
 
     try {
-        const dados = new FormData();
-        dados.append("nome", nome);
-        dados.append("descricao", descricao);
-        dados.append("preco", campoPreco.value);
-        dados.append("imagem", arquivo);
+        let resposta;
 
-        const resposta = await fetch("/api/admin/produtos", {
-            method: "POST",
-            body: dados
-        });
+        if (modoFormulario === "cadastro") {
+            const dados = new FormData();
+
+            dados.append("nome", nome);
+            dados.append("descricao", descricao);
+            dados.append("descricao_detalhada", descricaoDetalhada);
+            dados.append("ingredientes", ingredientes);
+            dados.append("alergenicos", alergenicos);
+            dados.append("preco", campoPreco.value);
+            dados.append("imagem", arquivo);
+
+            resposta = await fetch("/api/admin/produtos", {
+                method: "POST",
+                body: dados
+            });
+        } else {
+            const produtoId = campoId.value;
+
+            if (!produtoId) {
+                throw new Error("Não foi possível identificar o cupcake.");
+            }
+
+            const dados = {
+                nome,
+                descricao,
+                descricao_detalhada: descricaoDetalhada,
+                ingredientes,
+                alergenicos,
+                preco: campoPreco.value
+            };
+
+            resposta = await fetch(
+                `/api/admin/produtos/${produtoId}`,
+                {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dados)
+                }
+            );
+        }
 
         const resultado = await lerResposta(resposta);
 
         if (!resposta.ok) {
             throw new Error(
-                resultado.erro || "Não foi possível cadastrar o cupcake."
+                resultado.erro || "Não foi possível salvar o cupcake."
             );
         }
-
-        formularioProduto.reset();
-        nomeArquivoImagem.textContent = "Nenhuma imagem selecionada.";
 
         await carregarProdutos();
 
         formularioProduto.hidden = true;
         sucessoProduto.hidden = false;
-        textoSucessoProduto.textContent =
-            resultado.mensagem || "Cupcake cadastrado com sucesso!";
-    } catch (erro) {
-        mostrarMensagem(erro.message);
-    } finally {
-        botaoSalvar.disabled = false;
-        botaoSalvar.textContent = "Finalizar cadastro";
-    }
-});
 
-function fecharModalPreco() {
-    fecharModal(modalPreco);
-}
-
-document.querySelector("#fechar-modal-preco")
-    .addEventListener("click", fecharModalPreco);
-
-document.querySelector("#cancelar-preco")
-    .addEventListener("click", fecharModalPreco);
-
-modalPreco.addEventListener("click", evento => {
-    if (evento.target === modalPreco) {
-        fecharModalPreco();
-    }
-});
-
-formularioPreco.addEventListener("submit", async evento => {
-    evento.preventDefault();
-
-    const preco = Number(campoNovoPreco.value);
-    const produtoId = modalPreco.dataset.produtoId;
-
-    if (!Number.isFinite(preco) || preco <= 0) {
-        erroPreco.textContent = "Informe um preço maior que zero.";
-        return;
-    }
-
-    if (!produtoId) {
-        erroPreco.textContent = "Não foi possível identificar o cupcake.";
-        return;
-    }
-
-    botaoSalvarPreco.disabled = true;
-    botaoSalvarPreco.textContent = "Salvando...";
-
-    try {
-        const resposta = await fetch(
-            `/api/admin/produtos/${produtoId}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ preco })
-            }
-        );
-
-        const resultado = await lerResposta(resposta);
-
-        if (!resposta.ok) {
-            throw new Error(
-                resultado.erro || "Não foi possível atualizar o preço."
-            );
+        if (modoFormulario === "cadastro") {
+            tituloSucessoProduto.textContent = "Cadastro realizado!";
+        } else {
+            tituloSucessoProduto.textContent = "Alterações salvas!";
         }
 
-        fecharModalPreco();
-        mostrarMensagem(resultado.mensagem || "Preço atualizado com sucesso!");
-
-        await carregarProdutos();
+        textoSucessoProduto.textContent =
+            resultado.mensagem || "Operação realizada com sucesso!";
     } catch (erro) {
-        erroPreco.textContent = erro.message;
+        erroFormulario.textContent = erro.message;
     } finally {
-        botaoSalvarPreco.disabled = false;
-        botaoSalvarPreco.textContent = "Salvar alteração";
+        botaoSalvar.disabled = false;
+
+        botaoSalvar.textContent = modoFormulario === "cadastro"
+            ? "Finalizar cadastro"
+            : "Salvar alterações";
     }
 });
+
+// Modal de exclusão.
 
 function fecharModalExcluir() {
     fecharModal(modalExcluir);
@@ -479,7 +535,10 @@ botaoConfirmarExclusao.addEventListener("click", async () => {
         }
 
         fecharModalExcluir();
-        mostrarMensagem(resultado.mensagem || "Cupcake excluído com sucesso!");
+
+        mostrarMensagem(
+            resultado.mensagem || "Cupcake excluído com sucesso!"
+        );
 
         await carregarProdutos();
     } catch (erro) {
@@ -491,6 +550,8 @@ botaoConfirmarExclusao.addEventListener("click", async () => {
     }
 });
 
+// Fechar janelas com a tecla Escape.
+
 document.addEventListener("keydown", evento => {
     if (evento.key !== "Escape") {
         return;
@@ -500,13 +561,10 @@ document.addEventListener("keydown", evento => {
         fecharModal(modalProduto);
     }
 
-    if (modalPreco.classList.contains("aberto")) {
-        fecharModal(modalPreco);
-    }
-
     if (modalExcluir.classList.contains("aberto")) {
         fecharModal(modalExcluir);
     }
 });
 
+// Carrega os produtos quando a página abre.
 carregarProdutos();

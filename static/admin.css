@@ -1240,3 +1240,987 @@ textarea:focus-visible {
         animation-duration: 0.01ms !important;
     }
 }
+/* Novos campos de informações dos cupcakes */
+
+.modal-produto-conteudo textarea {
+    min-height: 90px;
+    line-height: 1.5;
+}
+
+#descricao-detalhada-produto,
+#ingredientes-produto,
+#alergenicos-produto {
+    min-height: 110px;
+}
+
+.aviso-alergenicos {
+    margin: 0;
+    padding: 11px 13px;
+    border-left: 3px solid var(--rosa);
+    border-radius: 6px;
+    background: #fff0f5;
+    color: var(--suave);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#erro-formulario-produto {
+    margin: 0;
+    color: #b4233d;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Botões de gerenciamento */
+
+#lista-produtos .acoes-produto button {
+    min-height: 38px;
+    padding: 10px 15px;
+    border-radius: 9px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    transition: all 0.2s ease;
+}
+
+/* Editar informações */
+#lista-produtos .acoes-produto .botao-editar-informacoes {
+    background: linear-gradient(135deg, #d94f79, #c43e6b);
+    border: 1px solid #d94f79;
+    color: white;
+}
+
+#lista-produtos .acoes-produto .botao-editar-informacoes:hover {
+    background: linear-gradient(135deg, #b73560, #8f2d52);
+    transform: translateY(-2px);
+}
+
+/* Editar preço */
+#lista-produtos .acoes-produto .botao-editar-preco {
+    background: #fff0f5;
+    border: 1px solid #edc0ce;
+    color: var(--rosa-escuro);
+}
+
+/* Excluir produto */
+#lista-produtos .acoes-produto .botao-excluir-produto {
+    background: white;
+    border: 1px solid #edc0ce;
+    color: var(--rosa-escuro);
+}
+
+#lista-produtos .acoes-produto .botao-editar-preco:hover,
+#lista-produtos .acoes-produto .botao-excluir-produto:hover {
+    background: #fbe0e9;
+    border-color: #e3a0b7;
+    transform: translateY(-2px);
+}
+/* =========================================
+   REORGANIZAÇÃO VISUAL DOS PEDIDOS
+========================================= */
+
+/* Cartão principal */
+.pedido {
+    background: #ffffff !important;
+    border: 1px solid #dedee5 !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    margin-bottom: 20px !important;
+    box-shadow: none !important;
+}
+
+/* Cabeçalho do pedido */
+.pedido h3 {
+    color: #54243a !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+}
+
+/* Informações do cliente e recebimento */
+.pedido-grade {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    margin: 18px 0 !important;
+}
+
+.pedido-grade p {
+    background: #f7f7f9 !important;
+    border: 1px solid #e8e8ed !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    color: #393943 !important;
+    font-size: 14px !important;
+}
+
+/* Detalhes de pagamento e observações */
+.pedido-detalhes {
+    background: #faf9fb !important;
+    border: 1px solid #e8e3e8 !important;
+    border-radius: 8px !important;
+    padding: 14px !important;
+    margin: 16px 0 !important;
+}
+
+.pedido-detalhes p {
+    color: #393943 !important;
+    font-size: 14px !important;
+    margin: 7px 0 !important;
+}
+
+/* PRODUTOS DO PEDIDO — destaque principal */
+.pedido-itens {
+    background: #f1f3f7 !important;
+    border: 1px solid #d9dde6 !important;
+    border-left: 4px solid #762b49 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin: 18px 0 !important;
+}
+
+.pedido-itens::before {
+    content: "PRODUTOS DO PEDIDO";
+    display: block;
+    color: #762b49;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    margin-bottom: 10px;
+}
+
+.pedido-itens p {
+    color: #292936 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.8 !important;
+    margin: 0 !important;
+}
+
+/* Resumo financeiro */
+.pedido-financeiro {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 12px !important;
+    background: #f8f5f7 !important;
+    border-radius: 8px !important;
+    padding: 14px 16px !important;
+    margin: 16px 0 !important;
+}
+
+.pedido-financeiro p {
+    margin: 0 !important;
+    color: #55505a !important;
+    font-size: 14px !important;
+}
+
+.pedido-financeiro p:last-child {
+    color: #762b49 !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+}
+
+/* Data do pedido */
+.pedido > p {
+    color: #77737c !important;
+    font-size: 12px !important;
+    margin: 14px 0 !important;
+}
+
+/* Área de alteração de status */
+.pedido-acoes {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    border-top: 1px solid #e8e8ed !important;
+    padding-top: 16px !important;
+    margin-top: 16px !important;
+}
+
+.pedido-acoes p {
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #54243a !important;
+}
+
+/* Celulares */
+@media (max-width: 650px) {
+    .pedido-grade {
+        grid-template-columns: 1fr !important;
+    }
+
+    .pedido-financeiro {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+    }
+}
+
+/* =========================================
+   PAINEL DE PEDIDOS — VISUAL COMPACTO
+========================================= */
+
+.pedido {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 10px 14px !important;
+    padding: 16px !important;
+    margin-bottom: 14px !important;
+    background: #f0edf1 !important;
+    border: 1px solid #d9cbd3 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+}
+
+/* Cabeçalho ocupa toda a largura */
+.pedido > :first-child {
+    grid-column: 1 / -1 !important;
+}
+
+/* Blocos de informações */
+.pedido-grade,
+.pedido-detalhes,
+.pedido-itens,
+.pedido-financeiro {
+    margin: 0 !important;
+    padding: 11px 13px !important;
+    border-radius: 7px !important;
+}
+
+/* Cliente e recebimento */
+.pedido-grade {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    background: #e5e0e6 !important;
+    border: 1px solid #d5cbd6 !important;
+}
+
+.pedido-grade p {
+    background: transparent !important;
+    border: none !important;
+    padding: 2px 0 !important;
+    font-size: 13px !important;
+}
+
+/* Pagamento e observações */
+.pedido-detalhes {
+    grid-column: 1 / -1 !important;
+    background: #e9e3e8 !important;
+    border: 1px solid #d8cbd4 !important;
+}
+
+.pedido-detalhes p {
+    margin: 4px 0 !important;
+    font-size: 13px !important;
+}
+
+/* Produtos */
+.pedido-itens {
+    grid-column: 1 / -1 !important;
+    background: #ded6df !important;
+    border: 1px solid #c9bac9 !important;
+    border-left: 4px solid #762b49 !important;
+}
+
+.pedido-itens::before {
+    margin-bottom: 5px !important;
+    font-size: 11px !important;
+}
+
+.pedido-itens p {
+    color: #302631 !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+}
+
+/* Valores */
+.pedido-financeiro {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    background: #54243a !important;
+    color: #ffffff !important;
+    padding: 12px 15px !important;
+}
+
+.pedido-financeiro p,
+.pedido-financeiro p:last-child {
+    color: #ffffff !important;
+    margin: 0 !important;
+}
+
+.pedido-financeiro p:last-child {
+    font-size: 17px !important;
+}
+
+/* Data */
+.pedido > p {
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+    font-size: 11px !important;
+}
+
+/* Status e botões */
+.pedido-acoes {
+    grid-column: 1 / -1 !important;
+    margin-top: 3px !important;
+    padding-top: 10px !important;
+    gap: 8px !important;
+}
+
+/* Ajustes para telas pequenas */
+@media (max-width: 650px) {
+    .pedido {
+        grid-template-columns: 1fr !important;
+    }
+
+    .pedido > * {
+        grid-column: 1 / -1 !important;
+    }
+
+    .pedido-financeiro {
+        flex-direction: column !important;
+    }
+}
+/* =====================================
+   PEDIDOS COMPACTOS — BELLUMIÊ
+===================================== */
+
+.pedido {
+    background: #fff;
+    border: 1px solid #e8dce2;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 5px rgba(70, 30, 48, 0.04);
+}
+
+/* Cabeçalho */
+.cabecalho-pedido {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee5e9;
+}
+
+.pedido-identificacao h3 {
+    margin: 0;
+    color: #54243a;
+    font-size: 17px;
+}
+
+.pedido-identificacao span {
+    display: block;
+    margin-top: 4px;
+    color: #88818a;
+    font-size: 12px;
+}
+
+.pedido-status-resumo {
+    background: #f8eaf0;
+    color: #762b49;
+    border-radius: 20px;
+    padding: 6px 11px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Resumo em quatro colunas */
+.pedido-resumo {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    padding: 15px 0;
+}
+
+.pedido-campo {
+    min-width: 0;
+}
+
+.pedido-campo span {
+    display: block;
+    color: #91858c;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.pedido-campo strong {
+    display: block;
+    color: #393039;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+/* Total e botão de detalhes */
+.pedido-linha-inferior {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-top: 1px solid #eee5e9;
+    padding-top: 12px;
+}
+
+.pedido-total-resumo {
+    color: #762b49;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.pedido-expandir {
+    border: 1px solid #762b49;
+    background: #fff;
+    color: #762b49;
+    padding: 8px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.pedido-expandir:hover {
+    background: #762b49;
+    color: #fff;
+}
+
+/* Detalhes expandidos */
+.pedido-conteudo {
+    border-top: 1px solid #eee5e9;
+    margin-top: 15px;
+    padding-top: 15px;
+}
+
+.pedido-conteudo[hidden] {
+    display: none !important;
+}
+
+.pedido-detalhe-bloco {
+    background: #faf6f8;
+    border: 1px solid #eee3e9;
+    border-radius: 8px;
+    padding: 13px 15px;
+    margin-bottom: 10px;
+}
+
+.pedido-detalhe-bloco h4 {
+    color: #762b49;
+    font-size: 13px;
+    margin: 0 0 9px;
+}
+
+.pedido-detalhe-bloco p {
+    color: #51474e;
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+/* Lista de produtos */
+.pedido-lista-produtos {
+    display: flex;
+    flex-direction: column;
+}
+
+.pedido-produto-linha {
+    padding: 8px 0;
+    border-bottom: 1px solid #eadfe5;
+    color: #393039;
+    font-size: 13px;
+}
+
+.pedido-produto-linha:last-child {
+    border-bottom: none;
+}
+
+/* Controles */
+.pedido-acoes {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 12px;
+}
+
+.pedido-acoes p {
+    margin-right: auto;
+    color: #54243a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.pedido-conteudo select,
+.pedido-conteudo button {
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+.pedido-conteudo .botao-excluir {
+    background: #fff;
+    color: #a33245;
+    border: 1px solid #d9aeb8;
+    cursor: pointer;
+}
+
+/* Telas menores */
+@media (max-width: 700px) {
+    .pedido-resumo {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 420px) {
+    .pedido {
+        padding: 13px;
+    }
+
+    .cabecalho-pedido {
+        align-items: flex-start;
+    }
+
+    .pedido-status-resumo {
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================
+   BELLUMIÊ — NOVA IDENTIDADE VISUAL
+   Creme, bege, chocolate e rosa antigo
+========================================= */
+
+:root {
+    --rosa: #a96873;
+    --rosa-escuro: #86505b;
+    --vinho: #49332d;
+    --texto: #443630;
+    --suave: #786b63;
+    --fundo: #f5f0e8;
+    --borda: #dfd2c2;
+    --branco: #fffdf9;
+    --sombra: 0 3px 12px rgba(73, 51, 45, 0.06);
+}
+
+body {
+    background: #f5f0e8 !important;
+    color: #443630 !important;
+    font-size: 16px;
+}
+
+/* Cabeçalho */
+
+.cabecalho {
+    background: #49332d !important;
+    border-bottom: 3px solid #b98587 !important;
+    box-shadow: none !important;
+}
+
+.cabecalho h1 {
+    color: #fffaf2 !important;
+    font-size: 30px !important;
+}
+
+.cabecalho p {
+    color: #e9d9cf !important;
+}
+
+.acoes-cabecalho a,
+.botao-cabecalho {
+    border-color: #c7a4a0 !important;
+    color: #fffaf2 !important;
+}
+
+/* Apresentação */
+
+.boas-vindas {
+    background: #eee5d8 !important;
+    border: 1px solid #dfd2c2 !important;
+    box-shadow: none !important;
+}
+
+.icone-boas-vindas {
+    background: #dfc9bc !important;
+    color: #49332d !important;
+}
+
+.etiqueta-painel {
+    color: #86505b !important;
+}
+
+.boas-vindas h2 {
+    color: #49332d !important;
+}
+
+.boas-vindas p {
+    color: #786b63 !important;
+}
+
+.detalhe-boas-vindas {
+    color: #b98587 !important;
+}
+
+/* Cartões de resumo */
+
+.cartao-resumo {
+    background: #fffdf9 !important;
+    border: 1px solid #dfd2c2 !important;
+    box-shadow: none !important;
+}
+
+.cartao-resumo:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.icone-resumo {
+    background: #eee1d5 !important;
+    color: #49332d !important;
+}
+
+.texto-resumo span {
+    color: #786b63 !important;
+    font-size: 16px !important;
+}
+
+.texto-resumo strong {
+    color: #49332d !important;
+    font-size: 40px !important;
+}
+
+/* Seções */
+
+.secao-pedidos,
+.secao-produtos {
+    background: #fffdf9 !important;
+    border: 1px solid #dfd2c2 !important;
+    box-shadow: none !important;
+}
+
+.secao-pedidos > h2,
+.cabecalho-produtos h2 {
+    color: #49332d !important;
+    font-size: 27px !important;
+}
+
+#mensagem,
+#mensagem-produtos,
+.cabecalho-produtos p {
+    color: #786b63 !important;
+    font-size: 15px !important;
+}
+
+/* =========================================
+   CARTÕES DE PEDIDOS
+========================================= */
+
+.pedido {
+    background: #fffaf3 !important;
+    border: 1px solid #dfd2c2 !important;
+    border-left: 4px solid #a96873 !important;
+    border-radius: 10px !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+}
+
+.pedido:hover {
+    border-color: #c7a4a0 !important;
+    border-left-color: #86505b !important;
+    box-shadow: none !important;
+}
+
+.pedido-identificacao h3 {
+    color: #49332d !important;
+    font-size: 21px !important;
+}
+
+.pedido-identificacao span {
+    color: #786b63 !important;
+    font-size: 14px !important;
+}
+
+.pedido-status-resumo {
+    background: #ead8d5 !important;
+    color: #70434b !important;
+    font-size: 14px !important;
+    padding: 7px 12px !important;
+}
+
+/* Informações resumidas */
+
+.pedido-campo span {
+    color: #786b63 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.3px !important;
+}
+
+.pedido-campo strong {
+    color: #49332d !important;
+    font-size: 16px !important;
+    line-height: 1.5 !important;
+}
+
+/* Total */
+
+.pedido-total-resumo {
+    color: #86505b !important;
+    font-size: 22px !important;
+}
+
+/* Botão de detalhes */
+
+.pedido-expandir {
+    background: #a96873 !important;
+    border: 1px solid #a96873 !important;
+    color: white !important;
+    font-size: 14px !important;
+    padding: 10px 17px !important;
+}
+
+.pedido-expandir:hover {
+    background: #86505b !important;
+    color: white !important;
+}
+
+/* =========================================
+   DETALHES DO PEDIDO
+========================================= */
+
+.pedido-conteudo {
+    border-top: 1px solid #dfd2c2 !important;
+}
+
+/* Blocos de informação */
+
+.pedido-detalhe-bloco {
+    background: #f1e9dd !important;
+    border: 1px solid #dfd2c2 !important;
+    border-radius: 9px !important;
+    padding: 17px !important;
+    margin-bottom: 13px !important;
+}
+
+.pedido-detalhe-bloco h4 {
+    color: #86505b !important;
+    font-size: 17px !important;
+    margin-bottom: 12px !important;
+}
+
+.pedido-detalhe-bloco p {
+    color: #49332d !important;
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    margin: 7px 0 !important;
+}
+
+/* Lista de cupcakes — maior destaque */
+
+.pedido-lista-produtos {
+    background: #fffdf9 !important;
+    border: 1px solid #dfd2c2 !important;
+    border-radius: 8px !important;
+    padding: 5px 15px !important;
+}
+
+.pedido-produto-linha {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 15px !important;
+    padding: 14px 5px !important;
+    border-bottom: 1px solid #e7dcd0 !important;
+    color: #49332d !important;
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    line-height: 1.6 !important;
+}
+
+.pedido-produto-linha:last-child {
+    border-bottom: none !important;
+}
+
+/* Controles de pedido */
+
+.pedido-acoes {
+    border-top: 1px solid #dfd2c2 !important;
+    padding-top: 15px !important;
+}
+
+.pedido-acoes p {
+    color: #49332d !important;
+    font-size: 16px !important;
+}
+
+.pedido-conteudo select {
+    background: #fffdf9 !important;
+    border: 1px solid #cbb8a6 !important;
+    color: #49332d !important;
+    font-size: 15px !important;
+    padding: 11px 13px !important;
+}
+
+.pedido-conteudo button {
+    background: #a96873 !important;
+    border: 1px solid #a96873 !important;
+    color: white !important;
+    font-size: 14px !important;
+    padding: 11px 15px !important;
+}
+
+.pedido-conteudo button:hover {
+    background: #86505b !important;
+}
+
+.pedido-conteudo .botao-excluir {
+    background: #fffdf9 !important;
+    border: 1px solid #c99da0 !important;
+    color: #86505b !important;
+}
+
+.pedido-conteudo .botao-excluir:hover {
+    background: #f0dfdc !important;
+}
+
+/* =========================================
+   GERENCIAMENTO DE PRODUTOS
+========================================= */
+
+#lista-produtos .produto-admin {
+    background: #fffaf3 !important;
+    border: 1px solid #dfd2c2 !important;
+    border-left: 4px solid #a96873 !important;
+}
+
+#lista-produtos .foto-produto-admin {
+    border-color: #dfd2c2 !important;
+    background: #f1e9dd !important;
+}
+
+#lista-produtos .informacoes-produto-admin h4 {
+    color: #49332d !important;
+    font-size: 22px !important;
+}
+
+#lista-produtos .informacoes-produto-admin p {
+    color: #66574f !important;
+    font-size: 15px !important;
+    line-height: 1.6 !important;
+}
+
+#lista-produtos .informacoes-produto-admin .preco-produto-admin {
+    background: #ead8d5 !important;
+    color: #70434b !important;
+    font-size: 18px !important;
+}
+
+#lista-produtos .acoes-produto .botao-editar-informacoes {
+    background: #a96873 !important;
+    border-color: #a96873 !important;
+}
+
+#lista-produtos .acoes-produto .botao-editar-informacoes:hover {
+    background: #86505b !important;
+}
+
+#lista-produtos .acoes-produto .botao-editar-preco,
+#lista-produtos .acoes-produto .botao-excluir-produto {
+    background: #fffdf9 !important;
+    border-color: #cbb8a6 !important;
+    color: #70434b !important;
+}
+
+#lista-produtos .acoes-produto .botao-editar-preco:hover,
+#lista-produtos .acoes-produto .botao-excluir-produto:hover {
+    background: #eee1d5 !important;
+}
+
+/* Formulários */
+
+.secao-produtos input,
+.secao-produtos textarea,
+.secao-produtos select,
+.modal-produto-conteudo input,
+.modal-produto-conteudo textarea,
+.modal-preco-conteudo input {
+    background: #fffdf9 !important;
+    border-color: #cbb8a6 !important;
+    color: #49332d !important;
+    font-size: 16px !important;
+}
+
+.secao-produtos label,
+.modal-produto-conteudo label,
+.modal-preco-conteudo label {
+    color: #49332d !important;
+    font-size: 15px !important;
+}
+
+#botao-abrir-cadastro,
+.acoes-formulario button,
+#botao-sucesso-ok,
+#salvar-preco {
+    background: #a96873 !important;
+}
+
+#botao-abrir-cadastro:hover,
+.acoes-formulario button:hover,
+#botao-sucesso-ok:hover,
+#salvar-preco:hover {
+    background: #86505b !important;
+}
+
+/* Modais */
+
+.conteudo-confirmacao,
+.modal-produto-conteudo,
+.modal-preco-conteudo {
+    background: #fffaf3 !important;
+    border-color: #dfd2c2 !important;
+    box-shadow: none !important;
+}
+
+.conteudo-confirmacao h2,
+.modal-produto-conteudo h2,
+.modal-preco-conteudo h2 {
+    color: #49332d !important;
+}
+
+.conteudo-confirmacao p,
+.modal-produto-conteudo p,
+.modal-preco-conteudo p {
+    color: #66574f !important;
+}
+
+#cancelar-preco,
+#botao-cancelar-cadastro,
+.botoes-confirmacao .botao-cancelar {
+    background: #fffdf9 !important;
+    border-color: #cbb8a6 !important;
+    color: #49332d !important;
+}
+
+/* Celulares */
+
+@media (max-width: 700px) {
+    .pedido-produto-linha {
+        align-items: flex-start !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        font-size: 16px !important;
+    }
+
+    .pedido-campo strong {
+        font-size: 15px !important;
+    }
+
+    .pedido-detalhe-bloco p {
+        font-size: 15px !important;
+    }
+}

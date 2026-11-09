@@ -16,8 +16,8 @@
         </div>
 
         <a class="botao-cabecalho" href="{{ url_for('painel_vendedor') }}">
-    Voltar aos pedidos
-</a>
+            Voltar aos pedidos
+        </a>
     </header>
 
     <main class="conteudo">
@@ -41,7 +41,7 @@
         </section>
     </main>
 
-    <!-- Modal de cadastro de cupcake -->
+    <!-- Modal de cadastro e edição de cupcake -->
     <div id="modal-produto" class="modal-produto" aria-hidden="true">
         <div
             class="modal-produto-conteudo"
@@ -59,7 +59,7 @@
             </button>
 
             <h2 id="titulo-formulario">Cadastrar novo cupcake</h2>
-            <p>Preencha os dados do novo sabor.</p>
+            <p id="subtitulo-formulario">Preencha os dados do novo sabor.</p>
 
             <form id="form-produto">
                 <input type="hidden" id="produto-id">
@@ -72,12 +72,44 @@
                     maxlength="80"
                 >
 
-                <label for="descricao-produto">Descrição</label>
+                <label for="descricao-produto">Descrição curta</label>
                 <textarea
                     id="descricao-produto"
                     required
                     maxlength="250"
+                    placeholder="Uma apresentação breve para o catálogo."
                 ></textarea>
+
+                <label for="descricao-detalhada-produto">
+                    Descrição detalhada
+                </label>
+                <textarea
+                    id="descricao-detalhada-produto"
+                    maxlength="2000"
+                    placeholder="Descreva o sabor, a cobertura e as características do cupcake."
+                ></textarea>
+
+                <label for="ingredientes-produto">Ingredientes</label>
+                <textarea
+                    id="ingredientes-produto"
+                    maxlength="1500"
+                    placeholder="Informe os ingredientes utilizados na receita."
+                ></textarea>
+
+                <label for="alergenicos-produto">
+                    Alergênicos
+                </label>
+                <textarea
+                    id="alergenicos-produto"
+                    maxlength="1000"
+                    placeholder="Informe os alergênicos identificados na receita."
+                ></textarea>
+
+                <p class="aviso-alergenicos">
+                    Preencha este campo com base na receita real e nos
+                    ingredientes utilizados. Não informe que um produto é
+                    livre de determinado alergênico sem confirmação.
+                </p>
 
                 <label for="preco-produto">Preço (R$)</label>
                 <input
@@ -88,17 +120,21 @@
                     step="0.01"
                 >
 
-                <label for="imagem-produto">Imagem do cupcake</label>
-                <input
-                    type="file"
-                    id="imagem-produto"
-                    accept="image/png, image/jpeg, image/webp"
-                    required
-                >
+                <div id="campo-imagem-produto">
+                    <label for="imagem-produto">Imagem do cupcake</label>
+                    <input
+                        type="file"
+                        id="imagem-produto"
+                        accept="image/png, image/jpeg, image/webp"
+                        required
+                    >
 
-                <p id="nome-arquivo-imagem">
-                    Nenhuma imagem selecionada.
-                </p>
+                    <p id="nome-arquivo-imagem">
+                        Nenhuma imagem selecionada.
+                    </p>
+                </div>
+
+                <p id="erro-formulario-produto" role="alert"></p>
 
                 <div class="acoes-formulario">
                     <button type="submit" id="botao-salvar-produto">
@@ -122,7 +158,7 @@
                 </div>
             </form>
 
-            <!-- Mensagem de cadastro realizado -->
+            <!-- Mensagem de sucesso -->
             <div
                 id="sucesso-produto"
                 class="sucesso-produto"
@@ -132,7 +168,7 @@
             >
                 <div class="icone-sucesso">&#10003;</div>
 
-                <h3>Cadastro realizado!</h3>
+                <h3 id="titulo-sucesso-produto">Cadastro realizado!</h3>
 
                 <p id="texto-sucesso-produto">
                     O cupcake foi cadastrado com sucesso.
@@ -195,32 +231,33 @@
             </form>
         </div>
     </div>
+
     <!-- Modal de confirmação de exclusão -->
-<div id="modal-excluir" class="modal-produto" aria-hidden="true">
-    <div
-        class="modal-preco-conteudo"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="titulo-excluir"
-    >
-        <div class="icone-editar-preco">!</div>
+    <div id="modal-excluir" class="modal-produto" aria-hidden="true">
+        <div
+            class="modal-preco-conteudo"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-excluir"
+        >
+            <div class="icone-editar-preco">!</div>
 
-        <h2 id="titulo-excluir">Excluir cupcake?</h2>
+            <h2 id="titulo-excluir">Excluir cupcake?</h2>
 
-        <p id="nome-cupcake-excluir">
-            Tem certeza de que deseja excluir este cupcake?
-        </p>
+            <p id="nome-cupcake-excluir">
+                Tem certeza de que deseja excluir este cupcake?
+            </p>
 
-        <div class="acoes-preco">
-            <button type="button" id="cancelar-exclusao">
-                Cancelar
-            </button>
+            <div class="acoes-preco">
+                <button type="button" id="cancelar-exclusao">
+                    Cancelar
+                </button>
 
-            <button type="button" id="confirmar-exclusao">
-                Sim, excluir
-            </button>
+                <button type="button" id="confirmar-exclusao">
+                    Sim, excluir
+                </button>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
