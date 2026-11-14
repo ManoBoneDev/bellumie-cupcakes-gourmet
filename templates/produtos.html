@@ -214,6 +214,54 @@
         </div>
     </div>
 
+<!-- Modal de recorte da imagem -->
+<div id="modal-recorte" class="modal-produto" aria-hidden="true">
+    <div class="modal-recorte-conteudo"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="titulo-recorte">
+
+        <button type="button"
+                id="fechar-recorte"
+                class="botao-fechar-modal"
+                aria-label="Fechar editor">
+            &times;
+        </button>
+
+        <h2 id="titulo-recorte">Ajustar imagem do produto</h2>
+
+        <p class="descricao-recorte">
+            Arraste a imagem para posicioná-la e use o controle para ajustar o zoom.
+        </p>
+
+        <div class="area-recorte">
+            <canvas id="canvas-recorte" width="400" height="400"></canvas>
+        </div>
+
+        <div class="controle-zoom">
+            <label for="zoom-recorte">Zoom da imagem</label>
+            <input type="range"
+                   id="zoom-recorte"
+                   min="1"
+                   max="3"
+                   step="0.01"
+                   value="1">
+        </div>
+
+        <p id="erro-recorte" role="alert"></p>
+
+        <div class="acoes-recorte">
+            <button type="button" id="cancelar-recorte">
+                Cancelar
+            </button>
+
+            <button type="button" id="confirmar-recorte">
+                Confirmar recorte
+            </button>
+        </div>
+    </div>
+</div>
+
     <!-- Modal para editar preço -->
     <div id="modal-preco" class="modal-produto" aria-hidden="true">
         <div

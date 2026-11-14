@@ -42,6 +42,186 @@ const botaoConfirmarExclusao = document.querySelector("#confirmar-exclusao");
 
 const extensoesPermitidas = [".jpg", ".jpeg", ".png", ".webp"];
 
+// Editor de recorte de imagens
+const modalRecorte = document.querySelector("#modal-recorte");
+const canvasRecorte = document.querySelector("#canvas-recorte");
+const contextoRecorte = canvasRecorte.getContext("2d");
+const zoomRecorte = document.querySelector("#zoom-recorte");
+const erroRecorte = document.querySelector("#erro-recorte");
+const botaoConfirmarRecorte = document.querySelector("#confirmar-recorte");
+
+let imagemOriginal = null;
+let arquivoRecortado = null;
+let arquivoPendente = null;
+let acaoAposRecorte = null;
+
+let zoomAtual = 1;
+let posicaoX = 0;
+let posicaoY = 0;
+let arrastandoImagem = false;
+let ponteiroAnteriorX = 0;
+let ponteiroAnteriorY = 0;
+
+const TAMANHO_RECORTE = 400;
+
+function desenharRecorte() {
+    if (!imagemOriginal) return;
+
+    const escalaBase = Math.max(
+        TAMANHO_RECORTE / imagemOriginal.naturalWidth,
+        TAMANHO_RECORTE / imagemOriginal.naturalHeight
+    );
+
+    const escala = escalaBase * zoomAtual;
+
+    const largura = imagemOriginal.naturalWidth * escala;
+    const altura = imagemOriginal.naturalHeight * escala;
+
+    const limiteX = Math.max(0, (largura - TAMANHO_RECORTE) / 2);
+    const limiteY = Math.max(0, (altura - TAMANHO_RECORTE) / 2);
+
+    posicaoX = Math.min(limiteX, Math.max(-limiteX, posicaoX));
+    posicaoY = Math.min(limiteY, Math.max(-limiteY, posicaoY));
+
+    contextoRecorte.clearRect(0, 0, TAMANHO_RECORTE, TAMANHO_RECORTE);
+
+    contextoRecorte.drawImage(
+        imagemOriginal,
+        (TAMANHO_RECORTE - largura) / 2 + posicaoX,
+        (TAMANHO_RECORTE - altura) / 2 + posicaoY,
+        largura,
+        altura
+    );
+}
+
+function abrirEditorRecorte(arquivo, aoConfirmar) {
+    if (!arquivo || !arquivo.type.startsWith("image/")) {
+        mostrarMensagem("Selecione um arquivo de imagem válido.");
+        return;
+    }
+
+    arquivoPendente = arquivo;
+    acaoAposRecorte = aoConfirmar;
+    erroRecorte.textContent = "";
+
+    const leitor = new FileReader();
+
+    leitor.onload = () => {
+        const imagem = new Image();
+
+        imagem.onload = () => {
+            imagemOriginal = imagem;
+            zoomAtual = 1;
+            posicaoX = 0;
+            posicaoY = 0;
+            zoomRecorte.value = "1";
+
+            desenharRecorte();
+            abrirModal(modalRecorte);
+        };
+
+        imagem.onerror = () => {
+            erroRecorte.textContent = "Não foi possível abrir essa imagem.";
+        };
+
+        imagem.src = leitor.result;
+    };
+
+    leitor.onerror = () => {
+        erroRecorte.textContent = "Não foi possível ler o arquivo selecionado.";
+    };
+
+    leitor.readAsDataURL(arquivo);
+}
+
+function fecharEditorRecorte() {
+    fecharModal(modalRecorte);
+
+    imagemOriginal = null;
+    arquivoPendente = null;
+    acaoAposRecorte = null;
+    arrastandoImagem = false;
+}
+
+zoomRecorte.addEventListener("input", () => {
+    zoomAtual = Number(zoomRecorte.value);
+    desenharRecorte();
+});
+
+canvasRecorte.addEventListener("pointerdown", evento => {
+    if (!imagemOriginal) return;
+
+    arrastandoImagem = true;
+    ponteiroAnteriorX = evento.clientX;
+    ponteiroAnteriorY = evento.clientY;
+
+    canvasRecorte.setPointerCapture(evento.pointerId);
+});
+
+canvasRecorte.addEventListener("pointermove", evento => {
+    if (!arrastandoImagem) return;
+
+    const escalaX = canvasRecorte.width / canvasRecorte.clientWidth;
+    const escalaY = canvasRecorte.height / canvasRecorte.clientHeight;
+
+    posicaoX += (evento.clientX - ponteiroAnteriorX) * escalaX;
+    posicaoY += (evento.clientY - ponteiroAnteriorY) * escalaY;
+
+    ponteiroAnteriorX = evento.clientX;
+    ponteiroAnteriorY = evento.clientY;
+
+    desenharRecorte();
+});
+
+canvasRecorte.addEventListener("pointerup", () => {
+    arrastandoImagem = false;
+});
+
+canvasRecorte.addEventListener("pointercancel", () => {
+    arrastandoImagem = false;
+});
+
+document.querySelector("#fechar-recorte").addEventListener("click", fecharEditorRecorte);
+document.querySelector("#cancelar-recorte").addEventListener("click", fecharEditorRecorte);
+
+modalRecorte.addEventListener("click", evento => {
+    if (evento.target === modalRecorte) {
+        fecharEditorRecorte();
+    }
+});
+
+botaoConfirmarRecorte.addEventListener("click", () => {
+    if (!imagemOriginal || !arquivoPendente || !acaoAposRecorte) {
+        return;
+    }
+
+    botaoConfirmarRecorte.disabled = true;
+    botaoConfirmarRecorte.textContent = "Preparando imagem...";
+
+    canvasRecorte.toBlob(blob => {
+        botaoConfirmarRecorte.disabled = false;
+        botaoConfirmarRecorte.textContent = "Confirmar recorte";
+
+        if (!blob) {
+            erroRecorte.textContent = "Não foi possível gerar o recorte.";
+            return;
+        }
+
+        const nome = arquivoPendente.name.replace(/\.[^.]+$/, "");
+
+        arquivoRecortado = new File(
+            [blob],
+            `${nome}-recortado.jpg`,
+            { type: "image/jpeg" }
+        );
+
+        const callback = acaoAposRecorte;
+
+        fecharEditorRecorte();
+        callback(arquivoRecortado);
+    }, "image/jpeg", 0.92);
+});
+
 let modoFormulario = "cadastro";
 
 function formatarMoeda(valor) {
@@ -74,9 +254,10 @@ function fecharModal(modal) {
     modal.setAttribute("aria-hidden", "true");
 
     const algumAberto = [
-        modalProduto,
-        modalExcluir
-    ].some(item => item.classList.contains("aberto"));
+    modalProduto,
+    modalExcluir,
+    modalRecorte
+].some(item => item.classList.contains("aberto"));
 
     if (!algumAberto) {
         document.body.style.overflow = "";
@@ -85,6 +266,7 @@ function fecharModal(modal) {
 
 function limparFormularioProduto() {
     formularioProduto.reset();
+    arquivoRecortado = null;
     campoId.value = "";
     nomeArquivoImagem.textContent = "Nenhuma imagem selecionada.";
     erroFormulario.textContent = "";
@@ -170,11 +352,34 @@ modalProduto.addEventListener("click", evento => {
     }
 });
 
+
 campoImagem.addEventListener("change", () => {
-    nomeArquivoImagem.textContent = campoImagem.files.length
-        ? `Imagem selecionada: ${campoImagem.files[0].name}`
-        : "Nenhuma imagem selecionada.";
+    const arquivo = campoImagem.files[0];
+
+    if (!arquivo) {
+        arquivoRecortado = null;
+        nomeArquivoImagem.textContent = "Nenhuma imagem selecionada.";
+        return;
+    }
+
+    const erro = validarImagem(arquivo);
+
+    if (erro) {
+        campoImagem.value = "";
+        arquivoRecortado = null;
+        nomeArquivoImagem.textContent = "Nenhuma imagem selecionada.";
+        erroFormulario.textContent = erro;
+        return;
+    }
+
+    abrirEditorRecorte(arquivo, imagem => {
+        arquivoRecortado = imagem;
+        nomeArquivoImagem.textContent =
+            "Imagem recortada e pronta para cadastro.";
+        erroFormulario.textContent = "";
+    });
 });
+
 
 function validarImagem(arquivo) {
     if (!arquivo) {
@@ -283,63 +488,64 @@ produtosFiltrados.forEach(produto => {
                 seletorArquivo.click();
             });
 
-            seletorArquivo.addEventListener("change", async () => {
-                const arquivo = seletorArquivo.files[0];
+            seletorArquivo.addEventListener("change", () => {
+    const arquivo = seletorArquivo.files[0];
 
-                if (!arquivo) {
-                    return;
+    if (!arquivo) return;
+
+    const erro = validarImagem(arquivo);
+
+    if (erro) {
+        mostrarMensagem(erro);
+        seletorArquivo.value = "";
+        return;
+    }
+
+    abrirEditorRecorte(arquivo, async imagemRecortada => {
+        botaoTrocarFoto.disabled = true;
+        botaoTrocarFoto.textContent = "Enviando foto...";
+
+        try {
+            const dados = new FormData();
+            dados.append("imagem", imagemRecortada);
+
+            const resposta = await fetch(
+                `/api/admin/produtos/${produto.id}/imagem`,
+                {
+                    method: "PUT",
+                    body: dados
                 }
+            );
 
-                const erro = validarImagem(arquivo);
+            const resultado = await lerResposta(resposta);
 
-                if (erro) {
-                    mostrarMensagem(erro);
-                    seletorArquivo.value = "";
-                    return;
-                }
+            if (!resposta.ok) {
+                throw new Error(
+                    resultado.erro || "Não foi possível trocar a foto."
+                );
+            }
 
-                botaoTrocarFoto.disabled = true;
-                botaoTrocarFoto.textContent = "Enviando foto...";
+            produto.imagem = resultado.imagem;
 
-                try {
-                    const dados = new FormData();
-                    dados.append("imagem", arquivo);
+            imagem.src =
+                `/static/imagens/${encodeURIComponent(produto.imagem)}?t=${Date.now()}`;
 
-                    const resposta = await fetch(
-                        `/api/admin/produtos/${produto.id}/imagem`,
-                        {
-                            method: "PUT",
-                            body: dados
-                        }
-                    );
+            imagem.alt = `Foto do produto ${produto.nome}`;
+            imagem.classList.remove("imagem-indisponivel");
 
-                    const resultado = await lerResposta(resposta);
+            mostrarMensagem(
+                `Foto do produto "${produto.nome}" atualizada com sucesso!`
+            );
 
-                    if (!resposta.ok) {
-                        throw new Error(
-                            resultado.erro || "Não foi possível trocar a foto."
-                        );
-                    }
-
-                    produto.imagem = resultado.imagem;
-
-                    imagem.src =
-                        `/static/imagens/${encodeURIComponent(produto.imagem)}?t=${Date.now()}`;
-
-                    imagem.alt = `Foto do produto ${produto.nome}`;
-                    imagem.classList.remove("imagem-indisponivel");
-
-                    mostrarMensagem(
-                        `Foto do produto "${produto.nome}" atualizada com sucesso!`
-                    );
-                } catch (erro) {
-                    mostrarMensagem(erro.message);
-                } finally {
-                    botaoTrocarFoto.disabled = false;
-                    botaoTrocarFoto.textContent = "Trocar foto";
-                    seletorArquivo.value = "";
-                }
-            });
+        } catch (erro) {
+            mostrarMensagem(erro.message);
+        } finally {
+            botaoTrocarFoto.disabled = false;
+            botaoTrocarFoto.textContent = "Trocar foto";
+            seletorArquivo.value = "";
+        }
+    });
+});
 
             // Botão para editar todas as informações.
             const botaoEditarInformacoes = document.createElement("button");
@@ -403,7 +609,7 @@ formularioProduto.addEventListener("submit", async evento => {
     const ingredientes = campoIngredientes.value.trim();
     const alergenicos = campoAlergenicos.value.trim();
     const preco = Number(campoPreco.value);
-    const arquivo = campoImagem.files[0];
+    const arquivo = arquivoRecortado;
 
     erroFormulario.textContent = "";
 
@@ -587,6 +793,10 @@ document.addEventListener("keydown", evento => {
     if (modalExcluir.classList.contains("aberto")) {
         fecharModal(modalExcluir);
     }
+
+    if (modalRecorte.classList.contains("aberto")) {
+    fecharEditorRecorte();
+}
 });
 
 // Alternar entre as categorias sem sair da página.
