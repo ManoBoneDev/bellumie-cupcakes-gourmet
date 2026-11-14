@@ -33,6 +33,8 @@ PASTA_IMAGENS.mkdir(parents=True, exist_ok=True)
 EXTENSOES_PERMITIDAS = {".jpg", ".jpeg", ".png", ".webp"}
 FORMAS_PAGAMENTO_VALIDAS = {"Pix", "Cartão", "Dinheiro"}
 
+CATEGORIAS_PRODUTO = {"Cupcakes", "Doces", "Bebidas"}
+
 STATUS_VALIDOS = {
     "Recebido",
     "Em preparação",
@@ -155,7 +157,7 @@ def atualizar_produto(produto_id):
         )
 
         if not produto_atualizado:
-            return jsonify({"erro": "Cupcake não encontrado."}), 404
+            return jsonify({"erro": "Produto não encontrado."}), 404
 
         return jsonify({"mensagem": "Preço atualizado com sucesso!"})
 
@@ -191,6 +193,16 @@ def atualizar_produto(produto_id):
 
         valores[campo] = valor
 
+    categoria = dados.get("categoria", "Cupcakes")
+
+    if not isinstance(categoria, str):
+        return jsonify({"erro": "Categoria inválida."}), 400
+
+    categoria = categoria.strip()
+
+    if categoria not in CATEGORIAS_PRODUTO:
+        return jsonify({"erro": "Categoria inválida."}), 400
+
     preco = converter_preco(dados.get("preco"))
 
     if preco is None:
@@ -206,26 +218,27 @@ def atualizar_produto(produto_id):
             valores["descricao_detalhada"],
             valores["ingredientes"],
             valores["alergenicos"],
-            preco
+            preco,
+            categoria
         )
 
         if not produto_atualizado:
-            return jsonify({"erro": "Cupcake não encontrado."}), 404
+            return jsonify({"erro": "Produto não encontrado."}), 404
 
         return jsonify({
-            "mensagem": "Informações do cupcake atualizadas com sucesso!"
+            "mensagem": "Informações do produto atualizadas com sucesso!"
         })
 
     except sqlite3.IntegrityError:
         return jsonify({
-            "erro": "Já existe outro cupcake com esse nome."
+            "erro": "Já existe outro produto com esse nome."
         }), 409
 
     except sqlite3.Error:
         app.logger.exception("Erro ao atualizar produto")
 
         return jsonify({
-            "erro": "Não foi possível atualizar o cupcake."
+            "erro": "Não foi possível atualizar o produto."
         }), 500
 
 
@@ -234,9 +247,9 @@ def excluir_produto(produto_id):
     produto_excluido = excluir_produto_por_id(produto_id)
 
     if not produto_excluido:
-        return jsonify({"erro": "Cupcake não encontrado."}), 404
+        return jsonify({"erro": "Produto não encontrado."}), 404
 
-    return jsonify({"mensagem": "Cupcake excluído com sucesso!"})
+    return jsonify({"mensagem": "Produto excluído com sucesso!"})
 
 
 @app.route(
@@ -268,7 +281,7 @@ def trocar_imagem_produto(produto_id):
 
         if resultado is None:
             return jsonify({
-                "erro": "Cupcake não encontrado."
+                "erro": "Produto não encontrado."
             }), 404
 
         if imagem_nova:
@@ -324,8 +337,15 @@ def cadastrar_produto():
         "alergenicos", ""
     ).strip()
 
+    categoria = request.form.get(
+        "categoria", "Cupcakes"
+    ).strip()
+
     arquivo = request.files.get("imagem")
     preco = converter_preco(request.form.get("preco"))
+
+    if categoria not in CATEGORIAS_PRODUTO:
+        return jsonify({"erro": "Categoria inválida."}), 400
 
     if preco is None:
         return jsonify({
@@ -362,7 +382,7 @@ def cadastrar_produto():
 
     if arquivo is None or not arquivo.filename:
         return jsonify({
-            "erro": "Escolha uma imagem para o cupcake."
+            "erro": "Escolha uma imagem para o produto."
         }), 400
 
     nome_seguro = secure_filename(arquivo.filename)
@@ -388,7 +408,8 @@ def cadastrar_produto():
                 nome_seguro,
                 descricao_detalhada,
                 ingredientes,
-                alergenicos
+                alergenicos,
+                categoria
             )
 
         except sqlite3.IntegrityError:
@@ -401,11 +422,11 @@ def cadastrar_produto():
                     )
 
             return jsonify({
-                "erro": "Já existe um cupcake com esse nome."
+                "erro": "Já existe um produto com esse nome."
             }), 409
 
         return jsonify({
-            "mensagem": "Cupcake cadastrado com sucesso!"
+            "mensagem": "Produto cadastrado com sucesso!"
         }), 201
 
     except (sqlite3.Error, OSError):
@@ -420,9 +441,8 @@ def cadastrar_produto():
         app.logger.exception("Erro ao cadastrar produto")
 
         return jsonify({
-            "erro": "Não foi possível cadastrar o cupcake."
+            "erro": "Não foi possível cadastrar o produto."
         }), 500
-
 
 
 @app.route("/api/pedidos", methods=["POST"])

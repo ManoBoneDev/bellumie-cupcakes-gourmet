@@ -194,8 +194,8 @@ img {
     height: auto;
     object-fit: contain;
     transition:
-        max-width 2s ease-in-out,
-        max-height 2s ease-in-out;
+        max-width 1s ease-in-out,
+        max-height 1s ease-in-out;
 }
 
 .indicador-rolagem {
@@ -218,7 +218,7 @@ img {
 .seta-rolagem {
     font-size: 30px;
     line-height: 1;
-    animation: descer-seta 1.3s infinite;
+    animation: descer-seta 0.6s infinite;
 }
 
 @keyframes descer-seta {
@@ -2073,4 +2073,979 @@ footer.rodape::before {
 
 #observacoes-cliente::placeholder {
     color: #999;
+}
+
+/* ========================================
+   NOVO MENU DE NAVEGAÇÃO
+======================================== */
+
+.menu-principal {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 3vw, 34px);
+
+    width: 100%;
+    padding: 16px 24px;
+
+    background: var(--rosa-fundo);
+}
+
+.menu-principal > a {
+    color: var(--vinho);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.menu-principal > a:hover {
+    color: var(--rosa);
+}
+
+.botao-carrinho {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 9px 16px;
+    color: var(--vinho);
+    background: #fff;
+    border: 1px solid var(--rosa-borda);
+    border-radius: 30px;
+}
+
+.botao-carrinho:hover {
+    color: white;
+    background: var(--vinho);
+}
+
+#contador-carrinho {
+    display: grid;
+    place-items: center;
+
+    min-width: 23px;
+    height: 23px;
+    padding: 0 5px;
+
+    color: white;
+    background: var(--rosa-escuro);
+    border-radius: 50%;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.botao-menu-mobile {
+    display: none;
+    padding: 8px 12px;
+    color: var(--vinho);
+    background: white;
+    border: 1px solid var(--rosa-borda);
+    font-size: 22px;
+}
+
+/* ========================================
+   BOTÃO E TEXTO DA TELA INICIAL
+======================================== */
+
+.hero-acoes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.hero-acoes p {
+    margin: 0;
+    color: var(--vinho);
+    font-family: var(--fonte-titulo);
+    font-size: clamp(17px, 2vw, 23px);
+}
+
+.botao-ver-cardapio {
+    display: inline-block;
+    padding: 13px 30px;
+
+    color: white;
+    background: var(--rosa-escuro);
+    border: 1px solid var(--rosa-escuro);
+    border-radius: 30px;
+
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+
+    box-shadow: 0 5px 14px rgba(122, 41, 70, 0.15);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.botao-ver-cardapio:hover {
+    color: white;
+    background: var(--vinho);
+    transform: translateY(-3px);
+}
+
+
+body.loja-revelada .hero-acoes {
+    display: none;
+}
+
+/* ========================================
+   MENU PARA CELULARES
+======================================== */
+
+@media (max-width: 650px) {
+    .menu-principal {
+        top: 12px;
+        justify-content: flex-end;
+        gap: 10px;
+        width: calc(100% - 24px);
+    }
+
+    .menu-principal > a {
+        display: none;
+    }
+
+    .botao-menu-mobile {
+        display: block;
+    }
+
+    .botao-carrinho {
+        padding: 8px 11px;
+        font-size: 13px;
+    }
+
+    .menu-principal.menu-aberto {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        padding: 12px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid var(--rosa-borda);
+        border-radius: 14px;
+        box-shadow: var(--sombra);
+    }
+
+    .menu-principal.menu-aberto > a {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        text-align: right;
+    }
+
+    .hero-acoes {
+        gap: 12px;
+    }
+
+    .botao-ver-cardapio {
+        padding: 11px 24px;
+    }
+}
+
+/* ========================================
+   MENU LATERAL — POSIÇÃO E ROLAGEM
+======================================== */
+
+.layout-loja {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 190px;
+    grid-template-areas: "conteudo menu";
+    align-items: start;
+    gap: 24px;
+
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 25px 24px;
+    overflow: visible;
+}
+
+/* Menu lateral acompanha a rolagem */
+.layout-loja > .menu-principal {
+    grid-area: menu;
+
+    position: sticky;
+    top: 24px;
+    align-self: start;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 18px;
+
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 20px 14px;
+
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid var(--rosa-borda);
+    border-radius: 18px;
+    box-shadow: 0 5px 20px rgba(122, 41, 70, 0.08);
+
+    transform: none;
+    z-index: 100;
+}
+
+.layout-loja > .menu-principal a {
+    display: block;
+    padding: 10px;
+
+    color: var(--vinho);
+    text-align: center;
+    text-decoration: none;
+    font-weight: 600;
+
+    border-radius: 9px;
+}
+
+.layout-loja > .menu-principal a:hover {
+    background: #fff0f5;
+}
+
+.layout-loja > .menu-principal .botao-carrinho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: 100%;
+    padding: 12px 8px;
+
+    color: white;
+    background: var(--rosa-escuro);
+    border: 0;
+    border-radius: 10px;
+}
+
+.layout-loja > .menu-principal .botao-carrinho:hover {
+    background: var(--vinho);
+}
+
+#contador-carrinho {
+    display: inline-grid;
+    place-items: center;
+
+    min-width: 22px;
+    height: 22px;
+    margin-left: 5px;
+    padding: 0 5px;
+
+    color: var(--rosa-escuro);
+    background: white;
+    border-radius: 50px;
+}
+
+/* Conteúdo principal */
+.layout-loja > main.container {
+    grid-area: conteudo;
+
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Tablets e celulares */
+@media (max-width: 900px) {
+    .layout-loja {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .layout-loja > .menu-principal {
+        position: static;
+        top: auto;
+
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .layout-loja > .menu-principal .botao-carrinho {
+        width: auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .layout-loja {
+        padding: 12px;
+    }
+
+    .layout-loja > .menu-principal {
+        gap: 8px;
+        padding: 12px;
+    }
+}
+
+/* Controles de quantidade */
+
+.controle-quantidade {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 8px 0;
+}
+
+.controle-quantidade button,
+.controles-carrinho button {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--rosa-borda);
+    border-radius: 8px;
+    background: var(--rosa-fundo);
+    color: var(--vinho);
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.controle-quantidade button:hover,
+.controles-carrinho button:hover {
+    background: var(--rosa);
+    color: white;
+}
+
+.controle-quantidade span,
+.controles-carrinho span {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.controle-modal {
+    margin: 15px 0;
+}
+
+/* Itens do carrinho */
+
+.item-carrinho {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+}
+
+.controles-carrinho {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.remover-item {
+    align-self: flex-start;
+}
+
+/* Alinhamento dos botões de quantidade */
+
+.controle-quantidade button,
+.controles-carrinho button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+    vertical-align: middle;
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+}
+
+/* ========================================
+   MENU LATERAL — CATEGORIAS BELLUMIÊ
+======================================== */
+
+.layout-loja > .menu-principal {
+    position: sticky;
+    top: 24px;
+    align-self: start;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+
+    width: 100%;
+    padding: 20px 14px;
+
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid var(--rosa-borda);
+    border-radius: 18px;
+    box-shadow: var(--sombra);
+}
+
+/* Botões das categorias */
+
+.layout-loja > .menu-principal .botao-categoria {
+    width: 100%;
+    padding: 13px 10px;
+
+    color: var(--vinho);
+    background: #fff5f8;
+    border: 1px solid var(--rosa-borda);
+    border-radius: 10px;
+
+    text-align: left;
+    font-family: var(--fonte-texto);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.layout-loja > .menu-principal .botao-categoria:hover {
+    color: white;
+    background: var(--rosa-escuro);
+}
+
+/* Categoria selecionada */
+
+.layout-loja > .menu-principal .botao-categoria.ativo {
+    color: white;
+    background: var(--vinho);
+    border-color: var(--vinho);
+    box-shadow: 0 4px 10px rgba(122, 41, 70, 0.15);
+}
+
+/* Botão do carrinho */
+
+.layout-loja > .menu-principal .botao-carrinho {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px 8px;
+
+    color: white;
+    background: var(--rosa-escuro);
+    border: 0;
+    border-radius: 10px;
+}
+
+.layout-loja > .menu-principal .botao-carrinho:hover {
+    background: var(--vinho);
+}
+
+/* Contador do carrinho */
+
+.layout-loja > .menu-principal #contador-carrinho {
+    display: inline-grid;
+    place-items: center;
+
+    min-width: 22px;
+    height: 22px;
+    margin-left: 5px;
+    padding: 0 5px;
+
+    color: var(--rosa-escuro);
+    background: white;
+    border-radius: 50px;
+}
+
+/* Menu em telas menores */
+
+@media (max-width: 900px) {
+    .layout-loja > .menu-principal {
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .layout-loja > .menu-principal .botao-categoria {
+        width: auto;
+        flex: 1;
+        min-width: 110px;
+        text-align: center;
+    }
+
+    .layout-loja > .menu-principal .botao-carrinho {
+        width: auto;
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .layout-loja > .menu-principal {
+        padding: 12px;
+        gap: 8px;
+    }
+
+    .layout-loja > .menu-principal .botao-categoria {
+        min-width: 90px;
+        padding: 10px 7px;
+        font-size: 12px;
+    }
+}
+
+/* =========================================
+   MODAL DE DETALHES — BELLUMIÊ
+========================================= */
+
+.modal-detalhes {
+    padding: 25px;
+    backdrop-filter: blur(5px);
+}
+
+.modal-detalhes-conteudo {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 35px;
+
+    width: 100%;
+    max-width: 850px;
+    max-height: 85vh;
+    overflow-y: auto;
+
+    padding: 38px;
+    background: #fffdfd;
+    border: 1px solid #f0dfe4;
+    border-radius: 22px;
+
+    box-shadow: 0 20px 60px rgba(75, 35, 48, 0.18);
+
+    animation: modalDetalhesEntrada 0.25s ease;
+}
+
+/* Animação de abertura */
+@keyframes modalDetalhesEntrada {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Botão fechar */
+.modal-detalhes-conteudo .fechar {
+    position: absolute;
+    top: 15px;
+    right: 17px;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 50%;
+    background: #f8edf0;
+    color: #7a2946;
+
+    font-size: 25px;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.modal-detalhes-conteudo .fechar:hover {
+    background: #f0dce3;
+    transform: rotate(90deg);
+}
+
+/* Coluna da imagem e compra */
+.detalhe-produto-esquerda {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    min-width: 0;
+    padding: 5px;
+}
+
+/* Foto natural, sem fundo rosa */
+.detalhe-produto-esquerda img {
+    display: block;
+    width: 100%;
+    height: 280px;
+
+    object-fit: cover;
+
+    background: transparent;
+    border: 2px solid #ead5dc;
+    border-radius: 15px;
+
+    box-shadow: 0 5px 16px rgba(75, 35, 48, 0.08);
+}
+
+/* Nome do produto */
+.detalhe-produto-esquerda h2 {
+    margin: 22px 0 8px;
+
+    color: #59263a;
+    font-family: 'Playfair Display', serif;
+    font-size: 27px;
+    line-height: 1.25;
+}
+
+/* Preço */
+.detalhe-produto-esquerda strong {
+    margin-bottom: 20px;
+
+    color: #b34d70;
+    font-size: 23px;
+    font-weight: 700;
+}
+
+/* Botão adicionar */
+#detalhe-adicionar {
+    width: 100%;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #a83258;
+    color: white;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#detalhe-adicionar:hover {
+    background: #7a2946;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(122, 41, 70, 0.2);
+}
+
+/* Coluna das informações */
+.detalhe-produto-direita {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+
+    min-width: 0;
+    padding: 12px 5px;
+}
+
+/* Blocos de informação */
+.detalhe-produto-direita section {
+    padding: 15px 18px;
+
+    background: #fff8fa;
+    border: 1px solid #f0e2e7;
+    border-radius: 13px;
+}
+
+/* Títulos das informações */
+.detalhe-produto-direita h3 {
+    margin: 0 0 8px;
+
+    color: #8e3857;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+}
+
+/* Textos */
+.detalhe-produto-direita p {
+    margin: 0;
+
+    color: #66545b;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+}
+
+/* Responsividade */
+@media (max-width: 650px) {
+    .modal-detalhes {
+        padding: 12px;
+    }
+
+    .modal-detalhes-conteudo {
+        grid-template-columns: 1fr;
+        gap: 18px;
+
+        max-height: 90vh;
+        padding: 25px 20px;
+        border-radius: 18px;
+    }
+
+    .detalhe-produto-esquerda {
+        padding: 0;
+    }
+
+    .detalhe-produto-esquerda img {
+        height: 220px;
+    }
+
+    .detalhe-produto-esquerda h2 {
+        margin-top: 15px;
+        font-size: 24px;
+    }
+
+    .detalhe-produto-direita {
+        gap: 10px;
+        padding: 0;
+    }
+
+    .detalhe-produto-direita section {
+        padding: 13px 15px;
+    }
+}
+
+/* =========================================
+   TIPOGRAFIA DO MODAL DE DETALHES
+========================================= */
+
+/* Nome do produto */
+.detalhe-produto-esquerda h2 {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Preço */
+.detalhe-produto-esquerda strong {
+    font-size: 26px;
+    font-weight: 700;
+}
+
+/* Títulos: descrição, ingredientes e alergênicos */
+.detalhe-produto-direita h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Textos das informações */
+.detalhe-produto-direita p {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.9;
+    color: #57434b;
+}
+
+/* Botão de adicionar */
+#detalhe-adicionar {
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* Ajuste para telas menores */
+@media (max-width: 650px) {
+    .detalhe-produto-esquerda h2 {
+        font-size: 26px;
+    }
+
+    .detalhe-produto-esquerda strong {
+        font-size: 23px;
+    }
+
+    .detalhe-produto-direita h3 {
+        font-size: 18px;
+    }
+
+    .detalhe-produto-direita p {
+        font-size: 14px;
+        line-height: 1.8;
+    }
+}
+
+/* =========================================
+   CHECKOUT — FORMULÁRIO E RESUMO LADO A LADO
+========================================= */
+
+.checkout-conteudo {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
+    align-items: start;
+    gap: 30px;
+
+    width: 95%;
+    max-width: 950px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 35px;
+}
+
+.checkout-principal {
+    min-width: 0;
+}
+
+.checkout-principal h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+.checkout-principal > p:first-of-type {
+    margin-bottom: 22px;
+}
+
+/* Resumo na coluna direita */
+.checkout-conteudo .resumo-checkout {
+    position: sticky;
+    top: 0;
+    align-self: start;
+
+    width: 100%;
+    margin-top: 45px;
+    padding: 22px;
+
+    background: #fff8fa;
+    border: 1px solid #efdce3;
+    border-radius: 15px;
+}
+
+.checkout-conteudo .resumo-checkout h3 {
+    margin-top: 0;
+    margin-bottom: 18px;
+    color: #59263a;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+/* Espaçamento entre os produtos */
+#resumo-checkout-itens {
+    margin-bottom: 15px;
+}
+
+.checkout-conteudo .linha-resumo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+/* Total em destaque */
+.checkout-conteudo .resumo-total {
+    padding-top: 14px;
+    border-top: 1px solid #ead5dc;
+    font-size: 17px;
+}
+
+/* Botão fechar */
+.checkout-conteudo > .fechar {
+    z-index: 2;
+}
+
+/* Celulares */
+@media (max-width: 700px) {
+    .checkout-conteudo {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 28px 20px;
+    }
+
+    .checkout-conteudo .resumo-checkout {
+        position: static;
+        margin-top: 5px;
+    }
+}
+
+/* =========================================
+   CORREÇÃO DEFINITIVA DO LAYOUT DO CHECKOUT
+========================================= */
+
+#checkout-container .checkout-conteudo {
+    display: grid !important;
+
+    grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.8fr) !important;
+    grid-template-rows: auto !important;
+    grid-template-areas: "formulario resumo" !important;
+
+    align-items: start !important;
+    justify-content: stretch !important;
+
+    width: min(950px, 95vw) !important;
+    max-width: 950px !important;
+    min-width: 0 !important;
+
+    height: auto !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+
+    gap: 30px !important;
+    padding: 35px !important;
+}
+
+/* Formulário obrigatoriamente na esquerda */
+#checkout-container .checkout-principal {
+    grid-area: formulario !important;
+
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Resumo obrigatoriamente na direita */
+#checkout-container .resumo-checkout {
+    grid-area: resumo !important;
+
+    display: block !important;
+    position: static !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+
+    align-self: start !important;
+    justify-self: stretch !important;
+
+    margin: 45px 0 0 !important;
+    padding: 22px !important;
+
+    background: #fff8fa !important;
+    border: 1px solid #efdce3 !important;
+    border-radius: 15px !important;
+}
+
+/* Botão de fechar no canto superior direito */
+#checkout-container .checkout-conteudo > .fechar {
+    position: absolute !important;
+    top: 15px !important;
+    right: 17px !important;
+}
+
+/* Adaptação para celular */
+@media (max-width: 700px) {
+    #checkout-container .checkout-conteudo {
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-areas:
+            "formulario"
+            "resumo" !important;
+
+        gap: 20px !important;
+        padding: 28px 20px !important;
+    }
+
+    #checkout-container .resumo-checkout {
+        margin: 0 !important;
+    }
 }

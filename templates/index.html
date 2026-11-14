@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Bellumiê Cupcakes Gourmet</title>
-
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
+
 <section class="tela-inicial">
     <header class="hero">
         <div class="hero-conteudo">
@@ -20,69 +18,130 @@
                 src="{{ url_for('static', filename='imagens/logo-bellumie.png') }}"
                 alt="Bellumiê Cupcakes Gourmet"
             >
+
+            <div class="hero-acoes">
+                <p>Pequenos momentos, grandes sabores.</p>
+                <a href="#titulo-produtos" class="botao-ver-cardapio">
+                    Ver cardápio
+                </a>
+            </div>
         </div>
     </header>
 
-    <a class="indicador-rolagem" href="#titulo-produtos">
-    </a>
+    <a class="indicador-rolagem" href="#titulo-produtos"></a>
 </section>
 
+<!-- Área da loja: menu e catálogo -->
+<div class="layout-loja">
 
-<main class="container">
+    <!-- MENU PRINCIPAL -->
+    <nav class="menu-principal" aria-label="Menu principal">
 
-   <!-- Catálogo de cupcakes -->
-<section class="secao-catalogo" aria-labelledby="titulo-produtos">
+    <button
+        type="button"
+        class="botao-categoria ativo"
+        data-categoria="Cupcakes"
+        aria-pressed="true"
+    >
+        🧁 Cupcakes
+    </button>
 
-    <div class="catalogo-apresentacao">
-        <span class="catalogo-etiqueta">Feitos para encantar</span>
+    <button
+        type="button"
+        class="botao-categoria"
+        data-categoria="Doces"
+        aria-pressed="false"
+    >
+        🍪 Doces
+    </button>
 
-        <h2 id="titulo-produtos">Nossos Cupcakes</h2>
+    <button
+        type="button"
+        class="botao-categoria"
+        data-categoria="Bebidas"
+        aria-pressed="false"
+    >
+        ☕ Bebidas
+    </button>
 
-        <p class="catalogo-descricao">
-            Pequenas obras de arte em forma de doce.
-            Descubra nossos sabores e encontre seu próximo favorito.
-        </p>
+    <button
+        type="button"
+        id="botao-carrinho"
+        class="botao-carrinho"
+    >
+        🛒 Carrinho
+        <span id="contador-carrinho">0</span>
+    </button>
 
-        <span class="catalogo-divisor" aria-hidden="true"></span>
-    </div>
+    <button
+        type="button"
+        id="botao-menu-mobile"
+        class="botao-menu-mobile"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+    >
+        ☰
+    </button>
 
-    <div class="produtos" id="lista-produtos">
-        <p>Carregando cupcakes...</p>
-    </div>
+</nav>
 
-</section>
+    <main class="container">
 
-    <!-- Carrinho de compras -->
-    <aside id="carrinho-container" aria-labelledby="titulo-carrinho">
-        <h2 id="titulo-carrinho">Meu pedido</h2>
+        <!-- Catálogo de produtos -->
+        <section class="secao-catalogo" aria-labelledby="titulo-produtos">
 
-        <ul id="lista-pedidos"></ul>
+            <div class="catalogo-apresentacao">
+                <span class="catalogo-etiqueta">Feitos para encantar</span>
 
-        <div class="linha-total">
-            <span>Total</span>
-            <strong id="total-pedido">R$ 0,00</strong>
+                <h2 id="titulo-produtos">Nosso Cardápio</h2>
+
+                <p class="catalogo-descricao">
+                    Descubra nossos doces e bebidas especiais.
+                    Encontre seu próximo sabor favorito.
+                </p>
+
+                <span class="catalogo-divisor" aria-hidden="true"></span>
+            </div>
+
+            <!-- Produtos carregados pelo JavaScript -->
+            <div class="produtos" id="lista-produtos">
+                <p>Carregando produtos...</p>
+            </div>
+
+        </section>
+
+        <!-- Carrinho de compras -->
+        <aside id="carrinho-container" aria-labelledby="titulo-carrinho">
+            <h2 id="titulo-carrinho">Meu pedido</h2>
+
+            <ul id="lista-pedidos"></ul>
+
+            <div class="linha-total">
+                <span>Total</span>
+                <strong id="total-pedido">R$ 0,00</strong>
+            </div>
+
+            <button id="ir-para-checkout" type="button">
+                Finalizar pedido
+            </button>
+        </aside>
+
+        <!-- Notificação de produto adicionado -->
+        <div
+            id="notificacao-produto"
+            class="notificacao-produto"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+        >
+            <span class="notificacao-icone" aria-hidden="true">✓</span>
+            <span id="texto-notificacao"></span>
         </div>
 
-        <button id="ir-para-checkout" type="button">
-            Finalizar pedido
-        </button>
-    </aside>
-
-    <!-- Notificação de produto adicionado -->
-    <div
-    id="notificacao-produto"
-    class="notificacao-produto"
-    role="status"
-    aria-live="polite"
-    aria-atomic="true"
->
-    <span class="notificacao-icone" aria-hidden="true">✓</span>
-    <span id="texto-notificacao"></span>
+    </main>
 </div>
-</main>
 
-
-<!-- Janela de detalhes do cupcake -->
+<!-- Janela de detalhes do produto -->
 <div id="modal-detalhes-produto" class="modal modal-detalhes">
     <div
         class="modal-detalhes-conteudo"
@@ -101,9 +160,7 @@
 
         <div class="detalhe-produto-esquerda">
             <img id="detalhe-imagem" src="" alt="">
-
             <h2 id="detalhe-nome"></h2>
-
             <strong id="detalhe-preco"></strong>
 
             <button id="detalhe-adicionar" type="button">
@@ -131,7 +188,7 @@
 </div>
 
 
-    <!-- Janela de finalização do pedido -->
+<!-- Janela de finalização do pedido -->
 <div id="checkout-container" class="modal">
     <div
         class="modal-conteudo checkout-conteudo"
@@ -148,89 +205,116 @@
             ×
         </button>
 
-        <h2 id="titulo-checkout">Finalizar pedido</h2>
-        <p>Preencha seus dados para concluir seu pedido.</p>
+        <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+        <div class="checkout-principal">
 
-        <div class="campo-checkout">
-            <label for="nome-cliente">Nome completo</label>
-            <input
-                type="text"
-                id="nome-cliente"
-                placeholder="Seu nome completo"
-                maxlength="80"
-                autocomplete="name"
-            >
+            <h2 id="titulo-checkout">Finalizar pedido</h2>
+            <p>Preencha seus dados para concluir seu pedido.</p>
+
+            <div class="campo-checkout">
+                <label for="nome-cliente">Nome completo</label>
+                <input
+                    type="text"
+                    id="nome-cliente"
+                    placeholder="Seu nome completo"
+                    maxlength="80"
+                    autocomplete="name"
+                >
+            </div>
+
+            <div class="campo-checkout">
+                <label for="telefone-cliente">Telefone</label>
+                <input
+                    type="tel"
+                    id="telefone-cliente"
+                    placeholder="(61) 99999-9999"
+                    maxlength="20"
+                    autocomplete="tel"
+                >
+            </div>
+
+            <div class="campo-checkout">
+                <label for="tipo-recebimento">Como deseja receber?</label>
+                <select id="tipo-recebimento">
+                    <option value="Entrega">Entrega</option>
+                    <option value="Retirada">Retirada no local</option>
+                </select>
+            </div>
+
+            <div id="grupo-endereco" class="campo-checkout">
+                <label for="endereco-cliente">Endereço de entrega</label>
+                <input
+                    type="text"
+                    id="endereco-cliente"
+                    placeholder="Rua, número, bairro e complemento"
+                    maxlength="300"
+                    autocomplete="street-address"
+                >
+            </div>
+
+            <div class="campo-checkout">
+                <label for="forma-pagamento">Forma de pagamento</label>
+                <select id="forma-pagamento">
+                    <option value="">Selecione uma opção</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Cartão">Cartão</option>
+                </select>
+            </div>
+
+            <div id="grupo-troco" class="campo-checkout" hidden>
+                <label for="precisa-troco">Precisa de troco?</label>
+                <select id="precisa-troco">
+                    <option value="Não">Não</option>
+                    <option value="Sim">Sim</option>
+                </select>
+            </div>
+
+            <div id="grupo-valor-troco" class="campo-checkout" hidden>
+                <label for="valor-troco">Troco para quanto?</label>
+                <input
+                    type="number"
+                    id="valor-troco"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Ex.: 50,00"
+                >
+            </div>
+
+            <div class="campo-checkout">
+                <label for="observacoes-cliente">Observações (opcional)</label>
+                <textarea
+                    id="observacoes-cliente"
+                    rows="3"
+                    maxlength="300"
+                    placeholder="Alguma informação adicional sobre seu pedido?"
+                ></textarea>
+            </div>
+
+            <p class="aviso-checkout">
+                Ambiente demonstrativo: nenhum pagamento real será realizado.
+                A taxa de entrega é fictícia.
+            </p>
+
+            <p id="mensagem-erro" role="alert"></p>
+
+            <div class="botoes-checkout">
+                <button id="confirmar-pedido" type="button">
+                    Confirmar pedido
+                </button>
+
+                <button
+                    id="voltar-checkout"
+                    class="botao-voltar"
+                    type="button"
+                >
+                    Voltar
+                </button>
+            </div>
+
         </div>
 
-        <div class="campo-checkout">
-            <label for="telefone-cliente">Telefone</label>
-            <input
-                type="tel"
-                id="telefone-cliente"
-                placeholder="(61) 99999-9999"
-                maxlength="20"
-                autocomplete="tel"
-            >
-        </div>
-
-        <div class="campo-checkout">
-            <label for="tipo-recebimento">Como deseja receber?</label>
-            <select id="tipo-recebimento">
-                <option value="Entrega">Entrega</option>
-                <option value="Retirada">Retirada no local</option>
-            </select>
-        </div>
-
-        <div id="grupo-endereco" class="campo-checkout">
-            <label for="endereco-cliente">Endereço de entrega</label>
-            <input
-                type="text"
-                id="endereco-cliente"
-                placeholder="Rua, número, bairro e complemento"
-                maxlength="300"
-                autocomplete="street-address"
-            >
-        </div>
-
-        <div class="campo-checkout">
-            <label for="forma-pagamento">Forma de pagamento</label>
-            <select id="forma-pagamento">
-                <option value="">Selecione uma opção</option>
-                <option value="Pix">Pix</option>
-                <option value="Dinheiro">Dinheiro</option>
-                <option value="Cartão">Cartão</option>
-            </select>
-        </div>
-
-        <div id="grupo-troco" class="campo-checkout" hidden>
-            <label for="precisa-troco">Precisa de troco?</label>
-            <select id="precisa-troco">
-                <option value="Não">Não</option>
-                <option value="Sim">Sim</option>
-            </select>
-        </div>
-
-        <div id="grupo-valor-troco" class="campo-checkout" hidden>
-            <label for="valor-troco">Troco para quanto?</label>
-            <input
-                type="number"
-                id="valor-troco"
-                min="0.01"
-                step="0.01"
-                placeholder="Ex.: 50,00"
-            >
-        </div>
-
-        <div class="campo-checkout">
-            <label for="observacoes-cliente">Observações (opcional)</label>
-            <textarea
-                id="observacoes-cliente"
-                rows="3"
-                maxlength="300"
-                placeholder="Alguma informação adicional sobre seu pedido?"
-            ></textarea>
-        </div>
-
+        <!-- COLUNA DIREITA: RESUMO DO PEDIDO -->
         <div class="resumo-checkout">
             <h3>Resumo do pedido</h3>
 
@@ -252,76 +336,57 @@
             </div>
         </div>
 
-        <p class="aviso-checkout">
-            Ambiente demonstrativo: nenhum pagamento real será realizado.
-            A taxa de entrega é fictícia.
+    </div>
+</div>
+
+
+<!-- Janela de confirmação do pedido -->
+<div id="pedido-sucesso" class="modal">
+    <div
+        class="modal-conteudo sucesso"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-sucesso"
+    >
+        <div class="icone-sucesso" aria-hidden="true">✓</div>
+
+        <h2 id="titulo-sucesso">Pedido realizado!</h2>
+
+        <p>Seu pedido foi recebido com sucesso.</p>
+
+        <p>
+            Obrigado por comprar na
+            <strong>Bellumiê Cupcakes Gourmet!</strong>
         </p>
 
-        <p id="mensagem-erro" role="alert"></p>
-
-        <div class="botoes-checkout">
-            <button id="confirmar-pedido" type="button">
-                Confirmar pedido
-            </button>
-
-            <button
-                id="voltar-checkout"
-                class="botao-voltar"
-                type="button"
-            >
-                Voltar
-            </button>
-        </div>
+        <button id="fechar-sucesso" type="button">
+            Continuar comprando
+        </button>
     </div>
 </div>
 
-    <!-- Janela de confirmação do pedido -->
-    <div id="pedido-sucesso" class="modal">
-        <div
-            class="modal-conteudo sucesso"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="titulo-sucesso"
-        >
-            <div class="icone-sucesso" aria-hidden="true">
-                ✓
-            </div>
+<!-- Rodapé -->
+<footer class="rodape" id="contato">
+    <div class="rodape-conteudo">
 
-            <h2 id="titulo-sucesso">Pedido realizado!</h2>
-
-            <p>Seu pedido foi recebido com sucesso.</p>
+        <div class="rodape-marca">
+            <span class="rodape-nome">Bellumiê</span>
+            <span class="rodape-subtitulo">Cupcakes Gourmet</span>
 
             <p>
-                Obrigado por comprar na
-                <strong>Bellumiê Cupcakes Gourmet!</strong>
+                Pequenos detalhes, grandes momentos de doçura.
             </p>
 
-            <button id="fechar-sucesso" type="button">
-                Continuar comprando
+            <button
+                id="abrir-sobre"
+                class="botao-sobre"
+                type="button"
+                aria-expanded="false"
+                aria-controls="sobre-nos"
+            >
+                Sobre nós
             </button>
         </div>
-    </div>
-
-    <footer class="rodape">
-    <div class="rodape-conteudo">
-<div class="rodape-marca">
-    <span class="rodape-nome">Bellumiê</span>
-    <span class="rodape-subtitulo">Cupcakes Gourmet</span>
-
-    <p>
-        Pequenos detalhes, grandes momentos de doçura.
-    </p>
-
-    <button
-        id="abrir-sobre"
-        class="botao-sobre"
-        type="button"
-        aria-expanded="false"
-        aria-controls="sobre-nos"
-    >
-        Sobre nós
-    </button>
-</div>
 
         <div class="rodape-info">
             <h2>Sobre o projeto</h2>
@@ -330,6 +395,7 @@
                 de Engenharia de Software.
             </p>
         </div>
+
     </div>
 
     <div class="rodape-final">
@@ -337,19 +403,27 @@
         <span>Projeto acadêmico — Engenharia de Software</span>
     </div>
 </footer>
-<section id="sobre-nos" class="sobre-nos" aria-labelledby="titulo-sobre" hidden>
+
+<!-- Seção Sobre Nós -->
+<section
+    id="sobre-nos"
+    class="sobre-nos"
+    aria-labelledby="titulo-sobre"
+    hidden
+>
     <div class="sobre-conteudo">
 
         <div class="sobre-ilustracao" aria-hidden="true">
             <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M39 47 C25 43 27 27 39 27
-                             C41 13 58 15 61 26
-                             C72 15 88 25 83 38
-                             C96 42 92 54 81 55"/>
-                    <path d="M35 49 L42 91 Q60 100 78 91
-                             L85 49 Q60 55 35 49Z"/>
+                <g
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="M39 47 C25 43 27 27 39 27 C41 13 58 15 61 26 C72 15 88 25 83 38 C96 42 92 54 81 55"/>
+                    <path d="M35 49 L42 91 Q60 100 78 91 L85 49 Q60 55 35 49Z"/>
                     <path d="M43 62 L46 83"/>
                     <path d="M57 62 L58 86"/>
                     <path d="M71 62 L69 83"/>
@@ -374,7 +448,7 @@
             <p>
                 Nossa proposta é oferecer uma experiência simples
                 e agradável para conhecer sabores, montar pedidos
-                e descobrir o encanto dos cupcakes gourmet.
+                e descobrir o encanto dos nossos produtos.
             </p>
 
             <p class="sobre-aviso">
@@ -382,7 +456,11 @@
                 como parte de um projeto de Engenharia de Software.
             </p>
 
-            <button id="fechar-sobre" type="button" class="botao-sobre-fechar">
+            <button
+                id="fechar-sobre"
+                type="button"
+                class="botao-sobre-fechar"
+            >
                 Voltar à loja
             </button>
         </div>
@@ -390,8 +468,7 @@
     </div>
 </section>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
-
 </html>

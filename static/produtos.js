@@ -1,9 +1,14 @@
+
 const listaProdutos = document.querySelector("#lista-produtos");
+const botoesCategoria = document.querySelectorAll(".categoria-admin");
+
+let categoriaAtual = "Cupcakes";
 const mensagemProdutos = document.querySelector("#mensagem-produtos");
 
 const formularioProduto = document.querySelector("#form-produto");
 const campoId = document.querySelector("#produto-id");
 const campoNome = document.querySelector("#nome-produto");
+const campoCategoria = document.querySelector("#categoria-produto");
 const campoDescricao = document.querySelector("#descricao-produto");
 const campoDescricaoDetalhada = document.querySelector("#descricao-detalhada-produto");
 const campoIngredientes = document.querySelector("#ingredientes-produto");
@@ -85,8 +90,8 @@ function limparFormularioProduto() {
     erroFormulario.textContent = "";
     modoFormulario = "cadastro";
 
-    tituloFormulario.textContent = "Cadastrar novo cupcake";
-    subtituloFormulario.textContent = "Preencha os dados do novo sabor.";
+    tituloFormulario.textContent = "Cadastrar novo produto";
+    subtituloFormulario.textContent = "Preencha os dados do produto.";
 
     botaoSalvar.textContent = "Finalizar cadastro";
     botaoCancelarCadastro.hidden = false;
@@ -114,13 +119,14 @@ function abrirEdicao(produto) {
 
     campoId.value = produto.id;
     campoNome.value = produto.nome || "";
+    campoCategoria.value = produto.categoria || "Cupcakes";
     campoDescricao.value = produto.descricao || "";
     campoDescricaoDetalhada.value = produto.descricao_detalhada || "";
     campoIngredientes.value = produto.ingredientes || "";
     campoAlergenicos.value = produto.alergenicos || "";
     campoPreco.value = Number(produto.preco).toFixed(2);
 
-    tituloFormulario.textContent = "Editar informações do cupcake";
+    tituloFormulario.textContent = "Editar informações do produto";
     subtituloFormulario.textContent =
         `Atualize as informações de ${produto.nome}.`;
 
@@ -192,7 +198,7 @@ function criarImagem(produto) {
 
     imagem.className = "foto-produto-admin";
     imagem.src = `/static/imagens/${encodeURIComponent(produto.imagem)}`;
-    imagem.alt = `Foto do cupcake ${produto.nome}`;
+    imagem.alt = `Foto do produto ${produto.nome}`;
     imagem.loading = "lazy";
 
     imagem.addEventListener("error", () => {
@@ -217,14 +223,19 @@ async function carregarProdutos() {
 
         listaProdutos.replaceChildren();
 
-        if (produtos.length === 0) {
-            mostrarMensagem("Nenhum cupcake cadastrado.");
-            return;
-        }
+        const produtosFiltrados = produtos.filter(produto =>
+    (produto.categoria || "Cupcakes") === categoriaAtual
+);
 
-        mostrarMensagem("");
+if (produtosFiltrados.length === 0) {
+    listaProdutos.replaceChildren();
+    mostrarMensagem(`Nenhum produto cadastrado na categoria ${categoriaAtual}.`);
+    return;
+}
 
-        produtos.forEach(produto => {
+mostrarMensagem("");
+
+produtosFiltrados.forEach(produto => {
             const cartao = document.createElement("article");
             cartao.className = "produto-admin";
 
@@ -235,6 +246,9 @@ async function carregarProdutos() {
 
             const titulo = document.createElement("h4");
             titulo.textContent = produto.nome;
+
+            const categoria = document.createElement("p");
+            categoria.textContent = `Categoria: ${produto.categoria || "Cupcakes"}`;
 
             const descricao = document.createElement("p");
             descricao.textContent = produto.descricao;
@@ -312,11 +326,11 @@ async function carregarProdutos() {
                     imagem.src =
                         `/static/imagens/${encodeURIComponent(produto.imagem)}?t=${Date.now()}`;
 
-                    imagem.alt = `Foto do cupcake ${produto.nome}`;
+                    imagem.alt = `Foto do produto ${produto.nome}`;
                     imagem.classList.remove("imagem-indisponivel");
 
                     mostrarMensagem(
-                        `Foto do cupcake "${produto.nome}" atualizada com sucesso!`
+                        `Foto do produto "${produto.nome}" atualizada com sucesso!`
                     );
                 } catch (erro) {
                     mostrarMensagem(erro.message);
@@ -359,6 +373,7 @@ async function carregarProdutos() {
 
             informacoes.append(
                 titulo,
+                categoria,
                 descricao,
                 preco,
                 situacao,
@@ -371,7 +386,7 @@ async function carregarProdutos() {
         });
     } catch (erro) {
         mostrarMensagem(
-            "Erro ao carregar os cupcakes. Confira se o servidor está funcionando."
+            "Erro ao carregar os produtos. Confira se o servidor está funcionando."
         );
 
         console.error(erro);
@@ -382,6 +397,7 @@ formularioProduto.addEventListener("submit", async evento => {
     evento.preventDefault();
 
     const nome = campoNome.value.trim();
+    const categoria = campoCategoria.value;
     const descricao = campoDescricao.value.trim();
     const descricaoDetalhada = campoDescricaoDetalhada.value.trim();
     const ingredientes = campoIngredientes.value.trim();
@@ -393,7 +409,12 @@ formularioProduto.addEventListener("submit", async evento => {
 
     if (!nome || !descricao) {
         erroFormulario.textContent =
-            "Preencha o nome e a descrição curta do cupcake.";
+            "Preencha o nome e a descrição curta do produto.";
+        return;
+    }
+
+    if (!["Cupcakes", "Doces", "Bebidas"].includes(categoria)) {
+        erroFormulario.textContent = "Selecione uma categoria válida.";
         return;
     }
 
@@ -423,6 +444,7 @@ formularioProduto.addEventListener("submit", async evento => {
             const dados = new FormData();
 
             dados.append("nome", nome);
+            dados.append("categoria", categoria);
             dados.append("descricao", descricao);
             dados.append("descricao_detalhada", descricaoDetalhada);
             dados.append("ingredientes", ingredientes);
@@ -438,11 +460,12 @@ formularioProduto.addEventListener("submit", async evento => {
             const produtoId = campoId.value;
 
             if (!produtoId) {
-                throw new Error("Não foi possível identificar o cupcake.");
+                throw new Error("Não foi possível identificar o produto.");
             }
 
             const dados = {
                 nome,
+                categoria,
                 descricao,
                 descricao_detalhada: descricaoDetalhada,
                 ingredientes,
@@ -466,7 +489,7 @@ formularioProduto.addEventListener("submit", async evento => {
 
         if (!resposta.ok) {
             throw new Error(
-                resultado.erro || "Não foi possível salvar o cupcake."
+                resultado.erro || "Não foi possível salvar o produto."
             );
         }
 
@@ -512,7 +535,7 @@ botaoConfirmarExclusao.addEventListener("click", async () => {
     const produtoId = modalExcluir.dataset.produtoId;
 
     if (!produtoId) {
-        mostrarMensagem("Não foi possível identificar o cupcake.");
+        mostrarMensagem("Não foi possível identificar o produto.");
         fecharModalExcluir();
         return;
     }
@@ -530,14 +553,14 @@ botaoConfirmarExclusao.addEventListener("click", async () => {
 
         if (!resposta.ok) {
             throw new Error(
-                resultado.erro || "Não foi possível excluir o cupcake."
+                resultado.erro || "Não foi possível excluir o produto."
             );
         }
 
         fecharModalExcluir();
 
         mostrarMensagem(
-            resultado.mensagem || "Cupcake excluído com sucesso!"
+            resultado.mensagem || "Produto excluído com sucesso!"
         );
 
         await carregarProdutos();
@@ -564,6 +587,23 @@ document.addEventListener("keydown", evento => {
     if (modalExcluir.classList.contains("aberto")) {
         fecharModal(modalExcluir);
     }
+});
+
+// Alternar entre as categorias sem sair da página.
+
+botoesCategoria.forEach(botao => {
+    botao.addEventListener("click", () => {
+        categoriaAtual = botao.dataset.categoria;
+
+        botoesCategoria.forEach(item => {
+            const selecionado = item === botao;
+
+            item.classList.toggle("ativa", selecionado);
+            item.setAttribute("aria-pressed", selecionado);
+        });
+
+        carregarProdutos();
+    });
 });
 
 // Carrega os produtos quando a página abre.

@@ -72,9 +72,13 @@ def criar_tabelas():
                 ALTER TABLE produtos
                 ADD COLUMN ingredientes TEXT NOT NULL DEFAULT ''
             """,
-            "alergenicos": """
+                        "alergenicos": """
                 ALTER TABLE produtos
                 ADD COLUMN alergenicos TEXT NOT NULL DEFAULT ''
+            """,
+            "categoria": """
+                ALTER TABLE produtos
+                ADD COLUMN categoria TEXT NOT NULL DEFAULT 'Cupcakes'
             """
         }
 

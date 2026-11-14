@@ -12,6 +12,7 @@ def listar_produtos_ativos():
                 descricao_detalhada,
                 ingredientes,
                 alergenicos,
+                categoria,
                 preco,
                 imagem
             FROM produtos
@@ -33,6 +34,7 @@ def listar_todos_produtos():
                 descricao_detalhada,
                 ingredientes,
                 alergenicos,
+                categoria,
                 preco,
                 imagem,
                 ativo
@@ -62,7 +64,8 @@ def atualizar_produto_no_banco(
     descricao_detalhada,
     ingredientes,
     alergenicos,
-    preco
+    preco,
+    categoria
 ):
     """Atualiza as informações completas de um cupcake."""
     with conectar_banco() as conexao:
@@ -74,7 +77,8 @@ def atualizar_produto_no_banco(
                 descricao_detalhada = ?,
                 ingredientes = ?,
                 alergenicos = ?,
-                preco = ?
+                preco = ?,
+                categoria = ?
             WHERE id = ?
         """, (
             nome,
@@ -83,6 +87,7 @@ def atualizar_produto_no_banco(
             ingredientes,
             alergenicos,
             float(preco),
+            categoria,
             produto_id
         ))
 
@@ -107,11 +112,12 @@ def cadastrar_produto_no_banco(
     imagem,
     descricao_detalhada="",
     ingredientes="",
-    alergenicos=""
+    alergenicos="",
+    categoria="Cupcakes"
 ):
     """Cadastra um novo cupcake no banco de dados."""
     with conectar_banco() as conexao:
-        conexao.execute("""
+                conexao.execute("""
             INSERT INTO produtos (
                 nome,
                 descricao,
@@ -119,9 +125,10 @@ def cadastrar_produto_no_banco(
                 imagem,
                 descricao_detalhada,
                 ingredientes,
-                alergenicos
+                alergenicos,
+                categoria
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             nome,
             descricao,
@@ -129,7 +136,8 @@ def cadastrar_produto_no_banco(
             imagem,
             descricao_detalhada,
             ingredientes,
-            alergenicos
+            alergenicos,
+            categoria
         ))
 
 
