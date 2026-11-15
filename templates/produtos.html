@@ -214,38 +214,156 @@
         </div>
     </div>
 
+
 <!-- Modal de recorte da imagem -->
 <div id="modal-recorte" class="modal-produto" aria-hidden="true">
-    <div class="modal-recorte-conteudo"
-         role="dialog"
-         aria-modal="true"
-         aria-labelledby="titulo-recorte">
-
-        <button type="button"
-                id="fechar-recorte"
-                class="botao-fechar-modal"
-                aria-label="Fechar editor">
+    <div
+        class="modal-recorte-conteudo"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-recorte"
+    >
+        <button
+            type="button"
+            id="fechar-recorte"
+            class="botao-fechar-modal"
+            aria-label="Fechar editor"
+        >
             &times;
         </button>
 
-        <h2 id="titulo-recorte">Ajustar imagem do produto</h2>
-
-        <p class="descricao-recorte">
-            Arraste a imagem para posicioná-la e use o controle para ajustar o zoom.
-        </p>
-
-        <div class="area-recorte">
-            <canvas id="canvas-recorte" width="400" height="400"></canvas>
+        <div class="cabecalho-editor-recorte">
+            <span class="etiqueta-editor-recorte">BELLUMIÊ • IMAGENS</span>
+            <h2 id="titulo-recorte">Editar imagem do produto</h2>
+            <p class="descricao-recorte">
+                Ajuste a foto e acompanhe como ela ficará nos cards da loja.
+            </p>
         </div>
 
-        <div class="controle-zoom">
-            <label for="zoom-recorte">Zoom da imagem</label>
-            <input type="range"
-                   id="zoom-recorte"
-                   min="1"
-                   max="3"
-                   step="0.01"
-                   value="1">
+        <div class="layout-editor-recorte">
+
+            <!-- COLUNA ESQUERDA: EDIÇÃO -->
+            <section class="coluna-ajuste-recorte">
+                <div class="titulo-coluna-recorte">
+                    <span class="numero-etapa">01</span>
+                    <div>
+                        <h3>Ajustar imagem</h3>
+                        <p>Arraste para posicionar e use o zoom.</p>
+                    </div>
+                </div>
+
+                <div class="area-recorte">
+                    <canvas
+                        id="canvas-recorte"
+                        width="400"
+                        height="400"
+                    ></canvas>
+                </div>
+
+                <div class="controle-zoom">
+                    <div class="cabecalho-zoom">
+                        <label for="zoom-recorte">Zoom da imagem</label>
+                        <span>Ajuste o enquadramento</span>
+                    </div>
+
+                    <input
+                        type="range"
+                        id="zoom-recorte"
+                        min="1"
+                        max="3"
+                        step="0.01"
+                        value="1"
+                    >
+                </div>
+            </section>
+
+            <!-- COLUNA DIREITA: PRÉ-VISUALIZAÇÃO -->
+            <aside class="coluna-preview-recorte">
+
+                <div class="titulo-coluna-recorte">
+                    <span class="numero-etapa">02</span>
+                    <div>
+                        <h3>Prévia na loja</h3>
+                        <p>Veja os dois formatos do card.</p>
+                    </div>
+                </div>
+
+                <div class="preview-grupo">
+                    <div class="preview-legenda">
+                        <span>Card normal</span>
+                        <small>Carrinho fechado</small>
+                    </div>
+
+                    <article class="preview-produto preview-normal">
+                        <img
+                            id="preview-imagem-normal"
+                            src=""
+                            alt="Prévia da imagem do produto"
+                        >
+
+                        <div class="preview-informacoes">
+                            <h4 id="preview-nome-normal">
+                                Nome do produto
+                            </h4>
+
+                            <p id="preview-descricao-normal">
+                                Descrição do produto aparecerá aqui.
+                            </p>
+
+                            <div class="preview-acoes">
+                                <span id="preview-preco-normal">
+                                    R$ 0,00
+                                </span>
+
+                                <button type="button" disabled>
+                                    Adicionar ao carrinho
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="preview-grupo">
+                    <div class="preview-legenda">
+                        <span>Card comprimido</span>
+                        <small>Carrinho aberto</small>
+                    </div>
+
+                    <div class="preview-area-comprimida">
+                        <article class="preview-produto preview-comprimido">
+                            <img
+                                id="preview-imagem-comprimida"
+                                src=""
+                                alt="Prévia da imagem do produto"
+                            >
+
+                            <div class="preview-informacoes">
+                                <h4 id="preview-nome-comprimido">
+                                    Nome do produto
+                                </h4>
+
+                                <p id="preview-descricao-comprimida">
+                                    Descrição do produto aparecerá aqui.
+                                </p>
+
+                                <div class="preview-acoes">
+                                    <span id="preview-preco-comprimido">
+                                        R$ 0,00
+                                    </span>
+
+                                    <button type="button" disabled>
+                                        Adicionar ao carrinho
+                                    </button>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+
+                <p class="aviso-preview-recorte">
+                    A prévia é atualizada automaticamente enquanto você ajusta a foto.
+                </p>
+            </aside>
         </div>
 
         <p id="erro-recorte" role="alert"></p>

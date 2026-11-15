@@ -50,6 +50,64 @@ const zoomRecorte = document.querySelector("#zoom-recorte");
 const erroRecorte = document.querySelector("#erro-recorte");
 const botaoConfirmarRecorte = document.querySelector("#confirmar-recorte");
 
+// Elementos da pré-visualização dos cards
+const previewImagemNormal = document.querySelector("#preview-imagem-normal");
+const previewImagemComprimida = document.querySelector("#preview-imagem-comprimida");
+
+const previewNomeNormal = document.querySelector("#preview-nome-normal");
+const previewNomeComprimido = document.querySelector("#preview-nome-comprimido");
+
+const previewDescricaoNormal = document.querySelector("#preview-descricao-normal");
+const previewDescricaoComprimida = document.querySelector("#preview-descricao-comprimida");
+
+const previewPrecoNormal = document.querySelector("#preview-preco-normal");
+const previewPrecoComprimido = document.querySelector("#preview-preco-comprimido");
+
+let dadosProdutoPreview = {
+    nome: "Nome do produto",
+    descricao: "Descrição do produto aparecerá aqui.",
+    preco: "R$ 0,00"
+};
+
+function atualizarTextoPreview() {
+    const formularioEstaAberto = modalProduto.classList.contains("aberto");
+
+    const nome = formularioEstaAberto
+        ? campoNome.value.trim() || dadosProdutoPreview.nome
+        : dadosProdutoPreview.nome;
+
+    const descricao = formularioEstaAberto
+        ? campoDescricao.value.trim() || dadosProdutoPreview.descricao
+        : dadosProdutoPreview.descricao;
+
+    const preco = formularioEstaAberto && campoPreco.value.trim()
+        ? formatarMoeda(Number(campoPreco.value))
+        : dadosProdutoPreview.preco;
+
+    previewNomeNormal.textContent = nome;
+    previewNomeComprimido.textContent = nome;
+
+    previewDescricaoNormal.textContent = descricao;
+    previewDescricaoComprimida.textContent = descricao;
+
+    previewPrecoNormal.textContent = preco;
+    previewPrecoComprimido.textContent = preco;
+}
+
+function atualizarImagemPreview() {
+    if (!imagemOriginal) return;
+
+    const imagemAtual = canvasRecorte.toDataURL("image/jpeg", 0.9);
+
+    previewImagemNormal.src = imagemAtual;
+    previewImagemComprimida.src = imagemAtual;
+}
+
+// Atualizar os textos enquanto o funcionário preenche o formulário
+campoNome.addEventListener("input", atualizarTextoPreview);
+campoDescricao.addEventListener("input", atualizarTextoPreview);
+campoPreco.addEventListener("input", atualizarTextoPreview);
+
 let imagemOriginal = null;
 let arquivoRecortado = null;
 let arquivoPendente = null;
@@ -63,6 +121,7 @@ let ponteiroAnteriorX = 0;
 let ponteiroAnteriorY = 0;
 
 const TAMANHO_RECORTE = 400;
+
 
 function desenharRecorte() {
     if (!imagemOriginal) return;
@@ -83,7 +142,12 @@ function desenharRecorte() {
     posicaoX = Math.min(limiteX, Math.max(-limiteX, posicaoX));
     posicaoY = Math.min(limiteY, Math.max(-limiteY, posicaoY));
 
-    contextoRecorte.clearRect(0, 0, TAMANHO_RECORTE, TAMANHO_RECORTE);
+    contextoRecorte.clearRect(
+        0,
+        0,
+        TAMANHO_RECORTE,
+        TAMANHO_RECORTE
+    );
 
     contextoRecorte.drawImage(
         imagemOriginal,
@@ -92,9 +156,12 @@ function desenharRecorte() {
         largura,
         altura
     );
+
+    // Atualiza os dois cards com o enquadramento atual
+    atualizarImagemPreview();
 }
 
-function abrirEditorRecorte(arquivo, aoConfirmar) {
+function abrirEditorRecorte(arquivo, aoConfirmar, produtoPreview = null) {
     if (!arquivo || !arquivo.type.startsWith("image/")) {
         mostrarMensagem("Selecione um arquivo de imagem válido.");
         return;
@@ -103,6 +170,23 @@ function abrirEditorRecorte(arquivo, aoConfirmar) {
     arquivoPendente = arquivo;
     acaoAposRecorte = aoConfirmar;
     erroRecorte.textContent = "";
+
+if (produtoPreview) {
+    dadosProdutoPreview = {
+        nome: produtoPreview.nome || "Nome do produto",
+        descricao: produtoPreview.descricao || "Descrição do produto aparecerá aqui.",
+        preco: formatarMoeda(Number(produtoPreview.preco) || 0)
+    };
+
+} else {
+    dadosProdutoPreview = {
+        nome: "Nome do produto",
+        descricao: "Descrição do produto aparecerá aqui.",
+        preco: "R$ 0,00"
+    };
+}
+
+atualizarTextoPreview();
 
     const leitor = new FileReader();
 
@@ -544,7 +628,7 @@ produtosFiltrados.forEach(produto => {
             botaoTrocarFoto.textContent = "Trocar foto";
             seletorArquivo.value = "";
         }
-    });
+        }, produto);
 });
 
             // Botão para editar todas as informações.
